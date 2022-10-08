@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group 'ua.boa'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    // https://mvnrepository.com/artifact/uk.co.caprica/vlcj
+    implementation group: 'uk.co.caprica', name: 'vlcj', version: '4.8.2'
+    // https://mvnrepository.com/artifact/uk.co.caprica/vlcj-natives
+    implementation group: 'uk.co.caprica', name: 'vlcj-natives', version: '4.8.1'
+// https://mvnrepository.com/artifact/net.java.dev.jna/jna-jpms
+    implementation group: 'net.java.dev.jna', name: 'jna-jpms', version: '5.12.1'
+// https://mvnrepository.com/artifact/net.java.dev.jna/jna-platform-jpms
+    implementation group: 'net.java.dev.jna', name: 'jna-platform-jpms', version: '5.12.1'
+
+}
+
+test {
+    useJUnitPlatform()
+}
