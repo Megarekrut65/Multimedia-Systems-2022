@@ -1,8 +1,9 @@
 package ua.boa;
 
-import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
-
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args){
+        MediaPlayer mediaPlayer = new MediaPlayer("BOA Media Player", 800, 600);
+        mediaPlayer.open();
     }
+
 }
