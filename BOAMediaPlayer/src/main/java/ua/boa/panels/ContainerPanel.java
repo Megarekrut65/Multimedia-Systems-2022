@@ -1,4 +1,4 @@
-package ua.boa;
+package ua.boa.panels;
 
 import javax.swing.*;
 import java.awt.*;

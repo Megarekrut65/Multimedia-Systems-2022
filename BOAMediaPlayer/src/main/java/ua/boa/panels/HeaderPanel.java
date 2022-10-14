@@ -1,5 +1,6 @@
-package ua.boa;
+package ua.boa.panels;
 
+import ua.boa.CustomMediaComponent;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
 import javax.swing.*;
@@ -8,9 +9,9 @@ import java.io.File;
 
 public class HeaderPanel extends JPanel {
     private final JFileChooser jFileChooser;
-    private final EmbeddedMediaPlayerComponent mediaPlayerComponent;
+    private final CustomMediaComponent mediaPlayerComponent;
     private final JFrame parent;
-    public HeaderPanel(EmbeddedMediaPlayerComponent mediaPlayerComponent, JFrame parent){
+    public HeaderPanel(CustomMediaComponent mediaPlayerComponent, JFrame parent){
         super(new BorderLayout());
         this.mediaPlayerComponent = mediaPlayerComponent;
         this.parent = parent;

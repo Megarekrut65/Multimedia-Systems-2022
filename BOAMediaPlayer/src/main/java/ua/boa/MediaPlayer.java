@@ -1,20 +1,15 @@
 package ua.boa;
 
-import uk.co.caprica.vlcj.media.Media;
-import uk.co.caprica.vlcj.player.base.MediaApi;
+import ua.boa.listeners.CustomMouseListener;
+import ua.boa.panels.ContainerPanel;
+import ua.boa.panels.ControlsPanel;
+import ua.boa.panels.HeaderPanel;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
 
 public class MediaPlayer{
     private final Dimension MIN_SIZE = new Dimension(500, 400);
@@ -22,10 +17,11 @@ public class MediaPlayer{
     private final Dimension size;
     private final JFrame jFrame;
     private final JPanel mainPanel;
-    private final EmbeddedMediaPlayerComponent mediaPlayerComponent;
+    private final CustomMediaComponent mediaPlayerComponent;
 
     public MediaPlayer(String title, int width, int height){
-        mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
+        mediaPlayerComponent = new CustomMediaComponent();
+        mediaPlayerComponent.mediaPlayer().controls().setRepeat(true);
         size = new Dimension(width, height);
         mainPanel = new JPanel();
         jFrame = new JFrame(title);

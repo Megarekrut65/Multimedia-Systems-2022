@@ -40,4 +40,11 @@ public class HidingRunnable implements Runnable{
             time.notify();
         }
     }
+    public void pressed(){
+        synchronized (time){
+            if(time.get() <= 0) show.doAction();
+            time.set(timeToHide);
+            time.notify();
+        }
+    }
 }
