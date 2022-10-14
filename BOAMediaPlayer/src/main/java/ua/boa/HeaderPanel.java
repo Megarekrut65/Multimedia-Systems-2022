@@ -11,12 +11,15 @@ public class HeaderPanel extends JPanel {
     private final EmbeddedMediaPlayerComponent mediaPlayerComponent;
     private final JFrame parent;
     public HeaderPanel(EmbeddedMediaPlayerComponent mediaPlayerComponent, JFrame parent){
+        super(new BorderLayout());
         this.mediaPlayerComponent = mediaPlayerComponent;
         this.parent = parent;
         jFileChooser = new JFileChooser();
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        add(createOpenFileButton());
-        add(createEnterUrlButton());
+        JPanel buttons = new JPanel();
+        buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
+        buttons.add(createOpenFileButton());
+        buttons.add(createEnterUrlButton());
+        add(buttons, BorderLayout.WEST);
     }
     private JButton createOpenFileButton(){
         JButton openFile = new JButton("Open file");
@@ -25,8 +28,6 @@ public class HeaderPanel extends JPanel {
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = jFileChooser.getSelectedFile();
                 if(file.exists()) {
-                    mediaPlayerComponent.mediaPlayer().controls().stop();
-                    mediaPlayerComponent.mediaPlayer().media().prepare(file.getPath());
                     mediaPlayerComponent.mediaPlayer().media().startPaused(file.getPath());
                 }
             }
@@ -43,9 +44,7 @@ public class HeaderPanel extends JPanel {
                     JOptionPane.PLAIN_MESSAGE,
                     null, null, "");
             if (url != null && url.length() > 0){
-                mediaPlayerComponent.mediaPlayer().controls().stop();
                 mediaPlayerComponent.mediaPlayer().media().prepare(url);
-                mediaPlayerComponent.mediaPlayer().controls().play();
             }
         });
         return enterURL;

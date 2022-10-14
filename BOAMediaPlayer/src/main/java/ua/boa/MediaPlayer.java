@@ -6,7 +6,10 @@ import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -32,9 +35,19 @@ public class MediaPlayer{
     private void panelSettings(){
         mainPanel.setBackground(Color.GRAY);
         mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(new HeaderPanel(mediaPlayerComponent, jFrame), BorderLayout.NORTH);
+        JPanel header = new HeaderPanel(mediaPlayerComponent, jFrame);
+        mainPanel.add(new ContainerPanel(header), BorderLayout.NORTH);
+        header.setSize(new Dimension(size.width, header.getPreferredSize().height));
         mainPanel.add(mediaPlayerComponent, BorderLayout.CENTER);
-        mainPanel.add(new ControlsPanel(mediaPlayerComponent, ICONS), BorderLayout.PAGE_END);
+        JPanel controls = new ControlsPanel(mediaPlayerComponent, ICONS);
+        mainPanel.add(new ContainerPanel(controls), BorderLayout.PAGE_END);
+        mainPanel.addMouseMotionListener(new CustomMouseListener(()->{
+            header.setVisible(false);
+            controls.setVisible(false);
+        }, ()->{
+            header.setVisible(true);
+            controls.setVisible(true);
+        },5));
     }
     private void frameSettings(){
         jFrame.setResizable(true);

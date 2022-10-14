@@ -6,17 +6,18 @@ import java.awt.*;
 public class CustomButton extends JButton {
     private final Color PRESSED_COLOR = new Color(0,0,0,1);
     private final Color RELEASED_COLOR = new Color(0,0,0,0);
-
+    private final int width;
+    private final int height;
     public CustomButton(ImageIcon imageIcon, int width, int height){
-        setBorder(BorderFactory.createEmptyBorder());
         setContentAreaFilled(false);
         setBorderPainted(false);
-        Image image = imageIcon.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT);
-        setIcon(new ImageIcon(image));
+        this.width = width;
+        this.height = height;
+        setImage(imageIcon);
+        setPreferredSize(new Dimension(width+5, height+5));
     }
     public void setImage(ImageIcon imageIcon){
-        Image image = imageIcon.getImage().getScaledInstance(getPreferredSize().width,
-                getPreferredSize().height, Image.SCALE_DEFAULT);
+        Image image = imageIcon.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT);
         setIcon(new ImageIcon(image));
     }
     @Override

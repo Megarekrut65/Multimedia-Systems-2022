@@ -1,5 +1,6 @@
 package ua.boa;
 
+import uk.co.caprica.vlcj.media.InfoApi;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
 import javax.swing.*;
@@ -15,21 +16,27 @@ public class ControlsPanel extends JPanel {
         ICONS = icons;
         setLayout(new FlowLayout());
         add(createPlayButton());
+        add(createPauseButton());
+        add(createStopButton());
     }
     private JButton createPlayButton(){
-        CustomButton play = new CustomButton(ICONS.PLAY_ICON, 50, 50);
-        AtomicBoolean isPlayed = new AtomicBoolean(false);
-        play.addActionListener(l->{
-            if(isPlayed.get()){
-                mediaPlayerComponent.mediaPlayer().controls().pause();
-                play.setImage(ICONS.PLAY_ICON);
-                isPlayed.set(false);
-                return;
-            }
-            mediaPlayerComponent.mediaPlayer().controls().play();
-            play.setImage(ICONS.PAUSE_ICON);
-            isPlayed.set(true);
-        });
+        CustomButton play = new CustomButton(ICONS.PLAY_ICON, 25, 25);
+        play.addActionListener(l-> mediaPlayerComponent.mediaPlayer().controls().play());
         return play;
+    }
+    private JButton createPauseButton(){
+        CustomButton pause = new CustomButton(ICONS.PAUSE_ICON, 25, 25);
+        pause.addActionListener(l-> mediaPlayerComponent.mediaPlayer().controls().setPause(true));
+        return pause;
+    }
+    private JButton createStopButton(){
+        CustomButton stop = new CustomButton(ICONS.STOP_ICON, 25, 25);
+        stop.addActionListener(l-> {
+            mediaPlayerComponent.mediaPlayer().controls().stop();
+            InfoApi info = mediaPlayerComponent.mediaPlayer().media().info();
+            if(info != null) mediaPlayerComponent.mediaPlayer().media()
+                    .startPaused(info.mrl());
+        });
+        return stop;
     }
 }
