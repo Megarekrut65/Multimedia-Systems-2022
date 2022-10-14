@@ -16,6 +16,12 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
         if(info != null) mediaPlayer().media()
                 .startPaused(info.mrl());
     }
+    public void rewindButton(){
+        mediaPlayer().controls().skipTime(-1000);
+    }
+    public void forwardButton(){
+        mediaPlayer().controls().skipTime(1000);
+    }
     public void changePosition(float position){
 //        InfoApi info = mediaPlayer().media().info();
 //        if(info != null) mediaPlayer().controls()

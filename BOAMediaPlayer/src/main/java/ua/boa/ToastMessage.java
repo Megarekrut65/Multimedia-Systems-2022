@@ -6,7 +6,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.RoundRectangle2D;
 
-class ToastMessage extends JFrame {
+public class ToastMessage extends JFrame {
     private final int timeToShow;
     public ToastMessage(ImageIcon imageIcon, String message, int timeToShow, Component parent) {
         this.timeToShow = timeToShow;

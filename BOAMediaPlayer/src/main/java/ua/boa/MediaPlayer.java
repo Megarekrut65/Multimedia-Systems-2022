@@ -4,6 +4,9 @@ import ua.boa.listeners.CustomMouseListener;
 import ua.boa.panels.ContainerPanel;
 import ua.boa.panels.ControlsPanel;
 import ua.boa.panels.HeaderPanel;
+import uk.co.caprica.vlcj.media.MediaEventListener;
+import uk.co.caprica.vlcj.player.base.Marquee;
+import uk.co.caprica.vlcj.player.base.MarqueePosition;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
 import javax.swing.*;
@@ -19,16 +22,27 @@ public class MediaPlayer{
     private final JPanel mainPanel;
     private final CustomMediaComponent mediaPlayerComponent;
     private final DataSaver dataSaver;
+    private final Marquee marquee;
 
     public MediaPlayer(String title, int width, int height){
         dataSaver = new DataSaver("src/main/resources/data/last.txt");
         mediaPlayerComponent = new CustomMediaComponent();
         mediaPlayerComponent.mediaPlayer().controls().setRepeat(true);
+        marquee = Marquee.marquee();
+        mediaPlayerComponent.mediaPlayer().marquee().set(marquee);
         size = new Dimension(width, height);
         mainPanel = new JPanel();
         jFrame = new JFrame(title);
         panelSettings();
         frameSettings();
+        marqueeSettings();
+    }
+    private void marqueeSettings(){
+        marquee.size(40)
+                .colour(Color.WHITE)
+                .position(MarqueePosition.BOTTOM_RIGHT)
+                .opacity(0.5f)
+                .enable();
     }
     private void panelSettings(){
         mainPanel.setBackground(Color.GRAY);
@@ -42,9 +56,11 @@ public class MediaPlayer{
         mainPanel.addMouseMotionListener(new CustomMouseListener(()->{
             header.setVisible(false);
             controls.setVisible(false);
+            mediaPlayerComponent.mediaPlayer().marquee().set(marquee.text(""));
         }, ()->{
             header.setVisible(true);
             controls.setVisible(true);
+            mediaPlayerComponent.mediaPlayer().marquee().set(marquee.text(dataSaver.getLastPath()));
         },5));
     }
     private void frameSettings(){
@@ -69,8 +85,7 @@ public class MediaPlayer{
         jFrame.setVisible(true);
         String last = dataSaver.getLastPath();
         if(last != null){
-            ToastMessage toastMessage = new ToastMessage(ICONS.ICON, "Displaying " + last, 3000, jFrame);
-            toastMessage.display();
+            mediaPlayerComponent.mediaPlayer().marquee().set(marquee.text(last));
             mediaPlayerComponent.mediaPlayer().media().prepare(last);
             mediaPlayerComponent.mediaPlayer().media().startPaused(last);
         }

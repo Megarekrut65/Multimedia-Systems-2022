@@ -1,5 +1,6 @@
 package ua.boa.listeners;
 
+import ua.boa.ToastMessage;
 import uk.co.caprica.vlcj.media.InfoApi;
 import uk.co.caprica.vlcj.media.MediaRef;
 import uk.co.caprica.vlcj.media.TrackType;
@@ -45,12 +46,12 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void forward(MediaPlayer mediaPlayer) {
-
+        System.out.println("Forward");
     }
 
     @Override
     public void backward(MediaPlayer mediaPlayer) {
-
+        System.out.println("backward");
     }
 
     @Override
@@ -144,7 +145,11 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void error(MediaPlayer mediaPlayer) {
-
+        SwingUtilities.invokeLater(() -> {
+            ToastMessage toastMessage = new ToastMessage(
+                    new ImageIcon(), "Failed to load Media", 4000, currentSlider);
+            toastMessage.display();
+        });
     }
 
     @Override

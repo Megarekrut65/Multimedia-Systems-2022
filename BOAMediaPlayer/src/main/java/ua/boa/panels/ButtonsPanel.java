@@ -18,6 +18,8 @@ public class ButtonsPanel extends JPanel {
         add(createPlayButton());
         add(createPauseButton());
         add(createStopButton());
+        add(createRewindButton());
+        add(createForwardButton());
     }
     private JButton createPlayButton(){
         CustomButton play = new CustomButton(ICONS.PLAY_ICON, 25, 25);
@@ -33,5 +35,15 @@ public class ButtonsPanel extends JPanel {
         CustomButton stop = new CustomButton(ICONS.STOP_ICON, 25, 25);
         stop.addActionListener(l-> mediaPlayerComponent.stopButton());
         return stop;
+    }
+    private JButton createRewindButton(){
+        CustomButton rewind = new CustomButton(ICONS.REWIND_ICON, 25, 25);
+        rewind.addActionListener(l-> mediaPlayerComponent.rewindButton());
+        return rewind;
+    }
+    private JButton createForwardButton(){
+        CustomButton forward = new CustomButton(ICONS.FORWARD_ICON, 25, 25);
+        forward.addActionListener(l-> mediaPlayerComponent.forwardButton());
+        return forward;
     }
 }
