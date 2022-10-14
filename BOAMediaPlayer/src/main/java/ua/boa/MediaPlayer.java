@@ -58,6 +58,7 @@ public class MediaPlayer{
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                jFrame.setVisible(false);
                 mediaPlayerComponent.stopButton();
                 mediaPlayerComponent.release();
                 System.exit(0);
@@ -68,6 +69,8 @@ public class MediaPlayer{
         jFrame.setVisible(true);
         String last = dataSaver.getLastPath();
         if(last != null){
+            ToastMessage toastMessage = new ToastMessage(ICONS.ICON, "Displaying " + last, 3000, jFrame);
+            toastMessage.display();
             mediaPlayerComponent.mediaPlayer().media().prepare(last);
             mediaPlayerComponent.mediaPlayer().media().startPaused(last);
         }
