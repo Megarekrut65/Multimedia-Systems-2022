@@ -18,8 +18,10 @@ public class MediaPlayer{
     private final JFrame jFrame;
     private final JPanel mainPanel;
     private final CustomMediaComponent mediaPlayerComponent;
+    private final DataSaver dataSaver;
 
     public MediaPlayer(String title, int width, int height){
+        dataSaver = new DataSaver("src/main/resources/data/last.txt");
         mediaPlayerComponent = new CustomMediaComponent();
         mediaPlayerComponent.mediaPlayer().controls().setRepeat(true);
         size = new Dimension(width, height);
@@ -31,7 +33,7 @@ public class MediaPlayer{
     private void panelSettings(){
         mainPanel.setBackground(Color.GRAY);
         mainPanel.setLayout(new BorderLayout());
-        JPanel header = new HeaderPanel(mediaPlayerComponent, jFrame);
+        JPanel header = new HeaderPanel(mediaPlayerComponent, jFrame, dataSaver);
         mainPanel.add(new ContainerPanel(header), BorderLayout.NORTH);
         header.setSize(new Dimension(size.width, header.getPreferredSize().height));
         mainPanel.add(mediaPlayerComponent, BorderLayout.CENTER);
@@ -50,12 +52,13 @@ public class MediaPlayer{
         jFrame.setMinimumSize(MIN_SIZE);
         jFrame.setSize(size);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setLocationRelativeTo(null);
+        //jFrame.setLocationRelativeTo(null);
         jFrame.setContentPane(mainPanel);
         jFrame.setIconImage(ICONS.ICON.getImage());
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                mediaPlayerComponent.stopButton();
                 mediaPlayerComponent.release();
                 System.exit(0);
             }
@@ -63,5 +66,10 @@ public class MediaPlayer{
     }
     public void open(){
         jFrame.setVisible(true);
+        String last = dataSaver.getLastPath();
+        if(last != null){
+            mediaPlayerComponent.mediaPlayer().media().prepare(last);
+            mediaPlayerComponent.mediaPlayer().media().startPaused(last);
+        }
     }
 }

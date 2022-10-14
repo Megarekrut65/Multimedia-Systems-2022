@@ -31,7 +31,6 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void playing(MediaPlayer mediaPlayer) {
-        System.out.println("playing");
     }
 
     @Override
@@ -60,6 +59,7 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
+
     }
 
     @Override
@@ -149,6 +149,5 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void mediaPlayerReady(MediaPlayer mediaPlayer) {
-
     }
 }

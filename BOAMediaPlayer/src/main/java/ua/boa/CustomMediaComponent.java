@@ -16,10 +16,12 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
         if(info != null) mediaPlayer().media()
                 .startPaused(info.mrl());
     }
-    public void selectFile(){
-
+    public void changePosition(float position){
+//        InfoApi info = mediaPlayer().media().info();
+//        if(info != null) mediaPlayer().controls()
+//                .setTime((long) (info.duration() * position));
     }
-    public void inputUrl(){
+    public void changeVolume(){
 
     }
 }

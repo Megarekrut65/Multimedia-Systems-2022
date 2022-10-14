@@ -1,7 +1,7 @@
 package ua.boa.panels;
 
 import ua.boa.CustomMediaComponent;
-import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
+import ua.boa.DataSaver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +11,12 @@ public class HeaderPanel extends JPanel {
     private final JFileChooser jFileChooser;
     private final CustomMediaComponent mediaPlayerComponent;
     private final JFrame parent;
-    public HeaderPanel(CustomMediaComponent mediaPlayerComponent, JFrame parent){
+    private final DataSaver dataSaver;
+    public HeaderPanel(CustomMediaComponent mediaPlayerComponent, JFrame parent, DataSaver dataSaver){
         super(new BorderLayout());
         this.mediaPlayerComponent = mediaPlayerComponent;
         this.parent = parent;
+        this.dataSaver = dataSaver;
         jFileChooser = new JFileChooser();
         JPanel buttons = new JPanel();
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
@@ -29,6 +31,7 @@ public class HeaderPanel extends JPanel {
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = jFileChooser.getSelectedFile();
                 if(file.exists()) {
+                    dataSaver.save(file.getPath(), "file");
                     mediaPlayerComponent.mediaPlayer().media().startPaused(file.getPath());
                 }
             }
@@ -43,9 +46,11 @@ public class HeaderPanel extends JPanel {
                     "Enter m3u url:\n",
                     parent.getTitle(),
                     JOptionPane.PLAIN_MESSAGE,
-                    null, null, "");
+                    null, null, dataSaver.getLastUrl());
             if (url != null && url.length() > 0){
                 mediaPlayerComponent.mediaPlayer().media().prepare(url);
+                mediaPlayerComponent.playButton();
+                dataSaver.save(url, "url");
             }
         });
         return enterURL;
