@@ -23,9 +23,9 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
         mediaPlayer().controls().skipTime(1000);
     }
     public void changePosition(float position){
-//        InfoApi info = mediaPlayer().media().info();
-//        if(info != null) mediaPlayer().controls()
-//                .setTime((long) (info.duration() * position));
+        InfoApi info = mediaPlayer().media().info();
+        if(info != null) mediaPlayer().controls()
+                .setTime((long) (info.duration() * position));
     }
     public void changeVolume(int value){
         mediaPlayer().audio().setVolume(value);

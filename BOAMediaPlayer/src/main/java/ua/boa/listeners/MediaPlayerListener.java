@@ -11,14 +11,14 @@ import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
 import javax.swing.*;
 
 public class MediaPlayerListener implements MediaPlayerEventListener {
-    private JSlider currentSlider;
+    private JProgressBar currentSlider;
     private final DataSaver dataSaver;
     public MediaPlayerListener(DataSaver dataSaver) {
         this.dataSaver = dataSaver;
     }
 
 
-    public void setSlider(JSlider slider){
+    public void setSlider(JProgressBar slider){
         currentSlider = slider;
     }
     @Override
@@ -68,6 +68,8 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void finished(MediaPlayer mediaPlayer) {
+        SwingUtilities.invokeLater(()->{
+            if(currentSlider != null) currentSlider.setValue(0);});
     }
 
     @Override
@@ -77,7 +79,9 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void positionChanged(MediaPlayer mediaPlayer, float newPosition) {
-        SwingUtilities.invokeLater(()->currentSlider.setValue((int) (100*newPosition)));
+        SwingUtilities.invokeLater(()->{
+            if(currentSlider != null) currentSlider.setValue((int) (100000*newPosition));
+        });
     }
 
     @Override
