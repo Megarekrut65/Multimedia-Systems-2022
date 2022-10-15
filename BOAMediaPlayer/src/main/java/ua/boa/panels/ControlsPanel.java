@@ -10,13 +10,12 @@ import java.awt.*;
 
 public class ControlsPanel extends JPanel {
 
-    public ControlsPanel(CustomMediaComponent mediaPlayerComponent, IconsLoader icons) {
+    public ControlsPanel(CustomMediaComponent mediaPlayerComponent,MediaPlayerListener mediaPlayerListener, IconsLoader icons) {
 
         setLayout(new BorderLayout());
-        MediaPlayerListener mediaPlayerListener = new MediaPlayerListener();
-        mediaPlayerComponent.mediaPlayer().events().addMediaPlayerEventListener(mediaPlayerListener);
         add(new PlaybackPanel(mediaPlayerComponent, mediaPlayerListener), BorderLayout.NORTH);
-        add(new ButtonsPanel(mediaPlayerComponent, icons), BorderLayout.SOUTH);
+        add(new ButtonsPanel(mediaPlayerComponent, icons), BorderLayout.WEST);
+        add(new VolumePanel(mediaPlayerComponent, icons), BorderLayout.EAST);
     }
 
 }

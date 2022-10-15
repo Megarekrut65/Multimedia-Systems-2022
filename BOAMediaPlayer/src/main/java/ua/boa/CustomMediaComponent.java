@@ -27,7 +27,10 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
 //        if(info != null) mediaPlayer().controls()
 //                .setTime((long) (info.duration() * position));
     }
-    public void changeVolume(){
+    public void changeVolume(int value){
+        mediaPlayer().audio().setVolume(value);
+    }
+    public void mouseMove(){
 
     }
 }

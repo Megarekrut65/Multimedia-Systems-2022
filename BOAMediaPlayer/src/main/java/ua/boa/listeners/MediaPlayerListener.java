@@ -1,5 +1,6 @@
 package ua.boa.listeners;
 
+import ua.boa.DataSaver;
 import ua.boa.ToastMessage;
 import uk.co.caprica.vlcj.media.InfoApi;
 import uk.co.caprica.vlcj.media.MediaRef;
@@ -11,13 +12,24 @@ import javax.swing.*;
 
 public class MediaPlayerListener implements MediaPlayerEventListener {
     private JSlider currentSlider;
+    private final DataSaver dataSaver;
+    public MediaPlayerListener(DataSaver dataSaver) {
+        this.dataSaver = dataSaver;
+    }
+
 
     public void setSlider(JSlider slider){
         currentSlider = slider;
     }
     @Override
     public void mediaChanged(MediaPlayer mediaPlayer, MediaRef media) {
-        currentSlider.setValue(0);
+        SwingUtilities.invokeLater(()->{
+            if(currentSlider != null) currentSlider.setValue(0);
+            String last = dataSaver.getLastPath();
+            if(last != null && !last.equals("")){
+                mediaPlayer.marquee().setText(last);
+            }
+        });
     }
 
     @Override
@@ -46,12 +58,12 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void forward(MediaPlayer mediaPlayer) {
-        System.out.println("Forward");
+
     }
 
     @Override
     public void backward(MediaPlayer mediaPlayer) {
-        System.out.println("backward");
+
     }
 
     @Override
@@ -65,7 +77,7 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void positionChanged(MediaPlayer mediaPlayer, float newPosition) {
-        currentSlider.setValue((int) (100*newPosition));
+        SwingUtilities.invokeLater(()->currentSlider.setValue((int) (100*newPosition)));
     }
 
     @Override

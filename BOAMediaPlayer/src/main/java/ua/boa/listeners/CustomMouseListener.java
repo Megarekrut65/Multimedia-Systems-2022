@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CustomMouseListener extends MouseAdapter implements MouseMotionListener{
     private final HidingRunnable hidingRunnable;
-    public CustomMouseListener(ua.boa.Action hide, Action show, int timeToHide){
+    public CustomMouseListener(Action hide, Action show, int timeToHide){
        hidingRunnable = new HidingRunnable(hide, show, timeToHide);
     }
     @Override

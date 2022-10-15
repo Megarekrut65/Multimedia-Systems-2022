@@ -1,6 +1,7 @@
 package ua.boa;
 
 import ua.boa.listeners.CustomMouseListener;
+import ua.boa.listeners.MediaPlayerListener;
 import ua.boa.panels.ContainerPanel;
 import ua.boa.panels.ControlsPanel;
 import ua.boa.panels.HeaderPanel;
@@ -23,13 +24,15 @@ public class MediaPlayer{
     private final CustomMediaComponent mediaPlayerComponent;
     private final DataSaver dataSaver;
     private final Marquee marquee;
+    private final MediaPlayerListener mediaPlayerListener;
 
     public MediaPlayer(String title, int width, int height){
         dataSaver = new DataSaver("src/main/resources/data/last.txt");
         mediaPlayerComponent = new CustomMediaComponent();
         mediaPlayerComponent.mediaPlayer().controls().setRepeat(true);
+        mediaPlayerListener = new MediaPlayerListener(dataSaver);
+        mediaPlayerComponent.mediaPlayer().events().addMediaPlayerEventListener(mediaPlayerListener);
         marquee = Marquee.marquee();
-        mediaPlayerComponent.mediaPlayer().marquee().set(marquee);
         size = new Dimension(width, height);
         mainPanel = new JPanel();
         jFrame = new JFrame(title);
@@ -45,15 +48,14 @@ public class MediaPlayer{
                 .enable();
     }
     private void panelSettings(){
-        mainPanel.setBackground(Color.GRAY);
         mainPanel.setLayout(new BorderLayout());
         JPanel header = new HeaderPanel(mediaPlayerComponent, jFrame, dataSaver);
         mainPanel.add(new ContainerPanel(header), BorderLayout.NORTH);
         header.setSize(new Dimension(size.width, header.getPreferredSize().height));
         mainPanel.add(mediaPlayerComponent, BorderLayout.CENTER);
-        JPanel controls = new ControlsPanel(mediaPlayerComponent, ICONS);
+        JPanel controls = new ControlsPanel(mediaPlayerComponent, mediaPlayerListener, ICONS);
         mainPanel.add(new ContainerPanel(controls), BorderLayout.PAGE_END);
-        mainPanel.addMouseMotionListener(new CustomMouseListener(()->{
+        CustomMouseListener mouseListener = new CustomMouseListener(()->{
             header.setVisible(false);
             controls.setVisible(false);
             mediaPlayerComponent.mediaPlayer().marquee().set(marquee.text(""));
@@ -61,14 +63,15 @@ public class MediaPlayer{
             header.setVisible(true);
             controls.setVisible(true);
             mediaPlayerComponent.mediaPlayer().marquee().set(marquee.text(dataSaver.getLastPath()));
-        },5));
+        },8);
+        mainPanel.addMouseMotionListener(mouseListener);
+        mainPanel.addMouseListener(mouseListener);
     }
     private void frameSettings(){
         jFrame.setResizable(true);
         jFrame.setMinimumSize(MIN_SIZE);
         jFrame.setSize(size);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //jFrame.setLocationRelativeTo(null);
         jFrame.setContentPane(mainPanel);
         jFrame.setIconImage(ICONS.ICON.getImage());
         jFrame.addWindowListener(new WindowAdapter() {
@@ -84,7 +87,9 @@ public class MediaPlayer{
     public void open(){
         jFrame.setVisible(true);
         String last = dataSaver.getLastPath();
-        if(last != null){
+        if(last != null && !last.equals("")){
+            ToastMessage toastMessage = new ToastMessage(ICONS.ICON, last, 3000, jFrame);
+            toastMessage.display();
             mediaPlayerComponent.mediaPlayer().marquee().set(marquee.text(last));
             mediaPlayerComponent.mediaPlayer().media().prepare(last);
             mediaPlayerComponent.mediaPlayer().media().startPaused(last);
