@@ -1,8 +1,7 @@
 package ua.boa.listeners;
 
-import ua.boa.DataSaver;
+import ua.boa.savers.PathSaver;
 import ua.boa.ToastMessage;
-import uk.co.caprica.vlcj.media.InfoApi;
 import uk.co.caprica.vlcj.media.MediaRef;
 import uk.co.caprica.vlcj.media.TrackType;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
@@ -12,9 +11,9 @@ import javax.swing.*;
 
 public class MediaPlayerListener implements MediaPlayerEventListener {
     private JProgressBar currentSlider;
-    private final DataSaver dataSaver;
-    public MediaPlayerListener(DataSaver dataSaver) {
-        this.dataSaver = dataSaver;
+    private final PathSaver pathSaver;
+    public MediaPlayerListener(PathSaver pathSaver) {
+        this.pathSaver = pathSaver;
     }
 
 
@@ -25,7 +24,7 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
     public void mediaChanged(MediaPlayer mediaPlayer, MediaRef media) {
         SwingUtilities.invokeLater(()->{
             if(currentSlider != null) currentSlider.setValue(0);
-            String last = dataSaver.getLastPath();
+            String last = pathSaver.getLastPath();
             if(last != null && !last.equals("")){
                 mediaPlayer.marquee().setText(last);
             }

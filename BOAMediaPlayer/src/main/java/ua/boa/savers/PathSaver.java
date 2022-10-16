@@ -1,13 +1,13 @@
-package ua.boa;
+package ua.boa.savers;
 
 import java.io.*;
 import java.util.Objects;
 
-public class DataSaver {
+public class PathSaver {
     private final String fileName;
     private String lastPath = null;
     private String lastUrl = null;
-    public DataSaver(String fileName) {
+    public PathSaver(String fileName) {
         this.fileName = fileName;
         try {
             File file = new File(fileName);
@@ -22,7 +22,7 @@ public class DataSaver {
             throw new RuntimeException(e);
         }
     }
-    private void writeToFile(){
+    private void writePathToFile(){
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName));
             bufferedWriter.write(lastPath+"\n");
@@ -35,7 +35,7 @@ public class DataSaver {
     public void save(String path, String type){
         if(Objects.equals(type, "url")) lastUrl = path;
         lastPath = path;
-        writeToFile();
+        writePathToFile();
     }
     public String getLastPath(){
         return lastPath;

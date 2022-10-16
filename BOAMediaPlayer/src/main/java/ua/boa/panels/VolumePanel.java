@@ -24,22 +24,11 @@ public class VolumePanel extends JPanel {
         add(volumeLabel, BorderLayout.WEST);
     }
     private ImageIcon getScaledIcon(ImageIcon imageIcon){
-        return  new ImageIcon(imageIcon.getImage().getScaledInstance(25,25, Image.SCALE_DEFAULT));
+        return new ImageIcon(imageIcon.getImage().getScaledInstance(25,25, Image.SCALE_DEFAULT));
     }
     private JSlider createVolumeSlider(){
-        JSlider jSlider = new JSlider(0, 100, 50);
+        JSlider jSlider = new JSlider(0, 100, mediaComponent.getVolume());
         jSlider.setPreferredSize(new Dimension(100, 20));
-        jSlider.addInputMethodListener(new InputMethodListener() {
-            @Override
-            public void inputMethodTextChanged(InputMethodEvent event) {
-
-            }
-
-            @Override
-            public void caretPositionChanged(InputMethodEvent event) {
-                System.out.println(event);
-            }
-        });
         jSlider.addChangeListener(l->{
             JSlider slider = (JSlider) l.getSource();
             mediaComponent.changeVolume(slider.getValue());

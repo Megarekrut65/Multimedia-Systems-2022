@@ -5,10 +5,10 @@ import ua.boa.listeners.MediaPlayerListener;
 import ua.boa.panels.ContainerPanel;
 import ua.boa.panels.ControlsPanel;
 import ua.boa.panels.HeaderPanel;
-import uk.co.caprica.vlcj.media.MediaEventListener;
+import ua.boa.savers.PathSaver;
+import ua.boa.savers.VolumeSaver;
 import uk.co.caprica.vlcj.player.base.Marquee;
 import uk.co.caprica.vlcj.player.base.MarqueePosition;
-import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,15 +22,16 @@ public class MediaPlayer{
     private final JFrame jFrame;
     private final JPanel mainPanel;
     private final CustomMediaComponent mediaPlayerComponent;
-    private final DataSaver dataSaver;
+    private final PathSaver pathSaver;
     private final Marquee marquee;
     private final MediaPlayerListener mediaPlayerListener;
 
     public MediaPlayer(String title, int width, int height){
-        dataSaver = new DataSaver("src/main/resources/data/last.txt");
-        mediaPlayerComponent = new CustomMediaComponent();
+        pathSaver = new PathSaver("src/main/resources/data/last.txt");
+        VolumeSaver volumeSaver = new VolumeSaver("src/main/resources/data/volume.txt");
+        mediaPlayerComponent = new CustomMediaComponent(volumeSaver);
         mediaPlayerComponent.mediaPlayer().controls().setRepeat(true);
-        mediaPlayerListener = new MediaPlayerListener(dataSaver);
+        mediaPlayerListener = new MediaPlayerListener(pathSaver);
         mediaPlayerComponent.mediaPlayer().events().addMediaPlayerEventListener(mediaPlayerListener);
         marquee = Marquee.marquee();
         size = new Dimension(width, height);
@@ -49,7 +50,7 @@ public class MediaPlayer{
     }
     private void panelSettings(){
         mainPanel.setLayout(new BorderLayout());
-        JPanel header = new HeaderPanel(mediaPlayerComponent, jFrame, dataSaver);
+        JPanel header = new HeaderPanel(mediaPlayerComponent, jFrame, pathSaver);
         mainPanel.add(new ContainerPanel(header), BorderLayout.NORTH);
         header.setSize(new Dimension(size.width, header.getPreferredSize().height));
         mainPanel.add(mediaPlayerComponent, BorderLayout.CENTER);
@@ -62,7 +63,7 @@ public class MediaPlayer{
         }, ()->{
             header.setVisible(true);
             controls.setVisible(true);
-            mediaPlayerComponent.mediaPlayer().marquee().set(marquee.text(dataSaver.getLastPath()));
+            mediaPlayerComponent.mediaPlayer().marquee().set(marquee.text(pathSaver.getLastPath()));
         },8);
         mainPanel.addMouseMotionListener(mouseListener);
         mainPanel.addMouseListener(mouseListener);
@@ -86,7 +87,7 @@ public class MediaPlayer{
     }
     public void open(){
         jFrame.setVisible(true);
-        String last = dataSaver.getLastPath();
+        String last = pathSaver.getLastPath();
         if(last != null && !last.equals("")){
             ToastMessage toastMessage = new ToastMessage(ICONS.ICON, last, 3000, jFrame);
             toastMessage.display();

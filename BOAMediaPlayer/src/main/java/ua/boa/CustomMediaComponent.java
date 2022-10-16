@@ -1,9 +1,17 @@
 package ua.boa;
 
+import ua.boa.savers.VolumeSaver;
 import uk.co.caprica.vlcj.media.InfoApi;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
 public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
+    private final VolumeSaver volumeSaver;
+
+    public CustomMediaComponent(VolumeSaver volumeSaver) {
+        this.volumeSaver = volumeSaver;
+        mediaPlayer().audio().setVolume(volumeSaver.getVolume());
+    }
+
     public void playButton(){
         mediaPlayer().controls().play();
     }
@@ -29,5 +37,9 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
     }
     public void changeVolume(int value){
         mediaPlayer().audio().setVolume(value);
+        volumeSaver.save(value);
+    }
+    public int getVolume(){
+        return volumeSaver.getVolume();
     }
 }
