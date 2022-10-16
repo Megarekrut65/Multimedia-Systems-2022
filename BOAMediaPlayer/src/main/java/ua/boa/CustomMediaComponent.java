@@ -30,7 +30,4 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
     public void changeVolume(int value){
         mediaPlayer().audio().setVolume(value);
     }
-    public void mouseMove(){
-
-    }
 }
