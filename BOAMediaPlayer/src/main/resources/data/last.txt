@@ -1,2 +1,0 @@
-http://shelter.mahoro-net.org:8000/tsumugi
-http://shelter.mahoro-net.org:8000/tsumugi

@@ -2,6 +2,7 @@ package ua.boa.panels;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class FileNamePanel extends JPanel {
     private final JLabel fileNameLabel;
@@ -10,11 +11,12 @@ public class FileNamePanel extends JPanel {
         super(new BorderLayout());
         fileNameLabel = new JLabel();
         fileNameLabel.setFont(new Font("arial", Font.BOLD, 15));
-        setBackground(new Color(0,0,0,0));
+        setBackground(Color.BLACK);
         add(fileNameLabel, BorderLayout.EAST);
+        add(Box.createVerticalStrut(20), BorderLayout.WEST);
     }
     public void setText(String text){
-        fileNameLabel.setVisible(!text.equals(""));
+        fileNameLabel.setVisible(!Objects.equals(text, ""));
         fileNameLabel.setText(text + " ");
     }
 }

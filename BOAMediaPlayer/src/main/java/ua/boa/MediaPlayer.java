@@ -6,8 +6,7 @@ import ua.boa.panels.ContainerPanel;
 import ua.boa.panels.ControlsPanel;
 import ua.boa.panels.FileNamePanel;
 import ua.boa.panels.HeaderPanel;
-import ua.boa.savers.PathSaver;
-import ua.boa.savers.VolumeSaver;
+import ua.boa.savers.DataSaver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,22 +20,24 @@ public class MediaPlayer{
     private final JFrame jFrame;
     private final JPanel mainPanel;
     private final CustomMediaComponent mediaPlayerComponent;
-    private final PathSaver pathSaver;
+    private final DataSaver dataSaver;
     private final FileNamePanel fileNamePanel;
     private final MediaPlayerListener mediaPlayerListener;
+    private final HidingThread hidingThread;
 
     public MediaPlayer(String title, int width, int height){
-        pathSaver = new PathSaver("src/main/resources/data/last.txt");
+        hidingThread = new HidingThread(8);
+        dataSaver = new DataSaver("src/main/resources/data/data.conf");
         fileNamePanel = new FileNamePanel();
-        mediaPlayerListener = new MediaPlayerListener(pathSaver, fileNamePanel);
-        VolumeSaver volumeSaver = new VolumeSaver("src/main/resources/data/volume.txt");
-        mediaPlayerComponent = new CustomMediaComponent(volumeSaver);
+        mediaPlayerListener = new MediaPlayerListener(dataSaver, fileNamePanel);
+        mediaPlayerComponent = new CustomMediaComponent(dataSaver, hidingThread);
         mediaComponentSettings();
         size = new Dimension(width, height);
         mainPanel = new JPanel();
         jFrame = new JFrame(title);
         panelSettings();
         frameSettings();
+        hidingThread.start();
     }
     private void mediaComponentSettings(){
         mediaPlayerComponent.mediaPlayer().controls().setRepeat(true);
@@ -45,21 +46,23 @@ public class MediaPlayer{
     }
     private void panelSettings(){
         mainPanel.setLayout(new BorderLayout());
-        JPanel header = new HeaderPanel(mediaPlayerComponent, jFrame, pathSaver);
+        HeaderPanel header = new HeaderPanel(mediaPlayerComponent, jFrame, dataSaver, ICONS);
         mainPanel.add(new ContainerPanel(header), BorderLayout.NORTH);
         header.setSize(new Dimension(size.width, header.getPreferredSize().height));
         mainPanel.add(mediaPlayerComponent, BorderLayout.CENTER);
         JPanel controls = new ControlsPanel(mediaPlayerComponent, mediaPlayerListener, ICONS);
         mainPanel.add(new ContainerPanel(controls), BorderLayout.PAGE_END);
-        CustomMouseListener mouseListener = new CustomMouseListener(()->{
+        hidingThread.addShowAction(()->{
+            header.setVisible(true);
+            controls.setVisible(true);
+            fileNamePanel.setText(dataSaver.getConfiguration().lastPath);
+        });
+        hidingThread.addHideAction(()->{
             header.setVisible(false);
             controls.setVisible(false);
             fileNamePanel.setText("");
-        }, ()->{
-            header.setVisible(true);
-            controls.setVisible(true);
-            fileNamePanel.setText(pathSaver.getLastPath());
-        },8);
+        });
+        CustomMouseListener mouseListener = new CustomMouseListener(hidingThread);
         mainPanel.addMouseMotionListener(mouseListener);
         mainPanel.addMouseListener(mouseListener);
     }
@@ -82,7 +85,7 @@ public class MediaPlayer{
     }
     public void open(){
         jFrame.setVisible(true);
-        String last = pathSaver.getLastPath();
+        String last = dataSaver.getConfiguration().lastPath;
         if(last != null && !last.equals("")){
             fileNamePanel.setText(last);
             mediaPlayerComponent.mediaPlayer().media().prepare(last);

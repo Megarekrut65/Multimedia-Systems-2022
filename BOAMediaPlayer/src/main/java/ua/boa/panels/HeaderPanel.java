@@ -1,28 +1,52 @@
 package ua.boa.panels;
 
+import ua.boa.CustomButton;
 import ua.boa.CustomMediaComponent;
-import ua.boa.savers.PathSaver;
+import ua.boa.IconsLoader;
+import ua.boa.savers.DataSaver;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HeaderPanel extends JPanel {
     private final JFileChooser jFileChooser;
     private final CustomMediaComponent mediaPlayerComponent;
     private final JFrame parent;
-    private final PathSaver pathSaver;
-    public HeaderPanel(CustomMediaComponent mediaPlayerComponent, JFrame parent, PathSaver pathSaver){
+    private final DataSaver dataSaver;
+    private final IconsLoader iconsLoader;
+    public HeaderPanel(CustomMediaComponent mediaPlayerComponent, JFrame parent,
+                       DataSaver dataSaver, IconsLoader icons){
         super(new BorderLayout());
         this.mediaPlayerComponent = mediaPlayerComponent;
         this.parent = parent;
-        this.pathSaver = pathSaver;
+        this.dataSaver = dataSaver;
+        this.iconsLoader = icons;
         jFileChooser = new JFileChooser();
         JPanel buttons = new JPanel();
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
         buttons.add(createOpenFileButton());
         buttons.add(createEnterUrlButton());
         add(buttons, BorderLayout.WEST);
+        add(createPinButton(), BorderLayout.EAST);
+    }
+    private JButton createPinButton(){
+        CustomButton pin = new CustomButton(dataSaver.getConfiguration().pinned
+                ?iconsLoader.UNPIN_ICON
+                :iconsLoader.PIN_ICON, 20,20);
+        AtomicBoolean pinned = new AtomicBoolean(dataSaver.getConfiguration().pinned);
+        pin.addActionListener(l->{
+            pinned.set(!pinned.get());
+            if(pinned.get()){
+                mediaPlayerComponent.pinPanels();
+                pin.setImage(iconsLoader.UNPIN_ICON);
+                return;
+            }
+            mediaPlayerComponent.unpinPanels();
+            pin.setImage(iconsLoader.PIN_ICON);
+        });
+        return pin;
     }
     private JButton createOpenFileButton(){
         JButton openFile = new JButton("Open file");
@@ -31,7 +55,8 @@ public class HeaderPanel extends JPanel {
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = jFileChooser.getSelectedFile();
                 if(file.exists()) {
-                    pathSaver.save(file.getPath(), "file");
+                    dataSaver.getConfiguration().lastPath = file.getPath();
+                    dataSaver.save();
                     mediaPlayerComponent.mediaPlayer().media().startPaused(file.getPath());
                 }
             }
@@ -46,11 +71,13 @@ public class HeaderPanel extends JPanel {
                     "Enter m3u url:\n",
                     parent.getTitle(),
                     JOptionPane.PLAIN_MESSAGE,
-                    null, null, pathSaver.getLastUrl());
+                    null, null, dataSaver.getConfiguration().lastUrl);
             if (url != null && url.length() > 0){
                 mediaPlayerComponent.mediaPlayer().media().prepare(url);
                 mediaPlayerComponent.playButton();
-                pathSaver.save(url, "url");
+                dataSaver.getConfiguration().lastPath = url;
+                dataSaver.getConfiguration().lastUrl = url;
+                dataSaver.save();
             }
         });
         return enterURL;

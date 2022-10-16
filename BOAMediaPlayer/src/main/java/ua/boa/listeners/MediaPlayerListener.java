@@ -1,8 +1,8 @@
 package ua.boa.listeners;
 
 import ua.boa.panels.FileNamePanel;
-import ua.boa.savers.PathSaver;
 import ua.boa.ToastMessage;
+import ua.boa.savers.DataSaver;
 import uk.co.caprica.vlcj.media.MediaRef;
 import uk.co.caprica.vlcj.media.TrackType;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
@@ -12,10 +12,10 @@ import javax.swing.*;
 
 public class MediaPlayerListener implements MediaPlayerEventListener {
     private JProgressBar currentSlider;
-    private final PathSaver pathSaver;
+    private final DataSaver dataSaver;
     private final FileNamePanel fileNamePanel;
-    public MediaPlayerListener(PathSaver pathSaver, FileNamePanel fileNamePanel) {
-        this.pathSaver = pathSaver;
+    public MediaPlayerListener(DataSaver dataSaver, FileNamePanel fileNamePanel) {
+        this.dataSaver = dataSaver;
         this.fileNamePanel = fileNamePanel;
     }
 
@@ -27,7 +27,7 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
     public void mediaChanged(MediaPlayer mediaPlayer, MediaRef media) {
         SwingUtilities.invokeLater(()->{
             if(currentSlider != null) currentSlider.setValue(0);
-            String last = pathSaver.getLastPath();
+            String last = dataSaver.getConfiguration().lastPath;
             if(last != null && !last.equals("")){
                 fileNamePanel.setText(last);
             }
@@ -165,7 +165,8 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
     public void error(MediaPlayer mediaPlayer) {
         SwingUtilities.invokeLater(() -> {
             ToastMessage toastMessage = new ToastMessage(
-                    new ImageIcon(), "Failed to load Media", 4000, currentSlider);
+                    new ImageIcon(), "Failed to load Media", 4000,
+                    currentSlider.getParent().getParent().getParent());//main panel
             toastMessage.display();
         });
     }

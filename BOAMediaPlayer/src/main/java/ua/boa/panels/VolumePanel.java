@@ -5,8 +5,6 @@ import ua.boa.IconsLoader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 
 public class VolumePanel extends JPanel {
     private final CustomMediaComponent mediaComponent;
