@@ -1,5 +1,6 @@
 package ua.boa.listeners;
 
+import ua.boa.panels.FileNamePanel;
 import ua.boa.savers.PathSaver;
 import ua.boa.ToastMessage;
 import uk.co.caprica.vlcj.media.MediaRef;
@@ -12,8 +13,10 @@ import javax.swing.*;
 public class MediaPlayerListener implements MediaPlayerEventListener {
     private JProgressBar currentSlider;
     private final PathSaver pathSaver;
-    public MediaPlayerListener(PathSaver pathSaver) {
+    private final FileNamePanel fileNamePanel;
+    public MediaPlayerListener(PathSaver pathSaver, FileNamePanel fileNamePanel) {
         this.pathSaver = pathSaver;
+        this.fileNamePanel = fileNamePanel;
     }
 
 
@@ -26,7 +29,7 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
             if(currentSlider != null) currentSlider.setValue(0);
             String last = pathSaver.getLastPath();
             if(last != null && !last.equals("")){
-                mediaPlayer.marquee().setText(last);
+                fileNamePanel.setText(last);
             }
         });
     }
