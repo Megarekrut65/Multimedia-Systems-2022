@@ -37,6 +37,7 @@ public class HeaderPanel extends JPanel {
         CustomButton pin = new CustomButton(dataSaver.getConfiguration().pinned
                 ?iconsLoader.UNPIN_ICON
                 :iconsLoader.PIN_ICON, 20,20);
+        pin.setToolTipText("Pin/unpin: P");
         AtomicBoolean pinned = new AtomicBoolean(dataSaver.getConfiguration().pinned);
         pin.addActionListener(l->{
             pinned.set(!pinned.get());
@@ -48,10 +49,12 @@ public class HeaderPanel extends JPanel {
             mediaPlayerComponent.unpinPanels();
             pin.setImage(iconsLoader.PIN_ICON);
         });
+        mediaPlayerComponent.addEventToKeyListener(80/*P*/, pin::doClick);
         return pin;
     }
     private JButton createHistoryButton(){
         JButton history = new NoFocusableButton("History");
+        history.setToolTipText("Open history: H");
         history.addActionListener(l->{
             String path = (String) JOptionPane.showInputDialog(
                     parent,
@@ -68,10 +71,12 @@ public class HeaderPanel extends JPanel {
                 dataSaver.save();
             }
         });
+        mediaPlayerComponent.addEventToKeyListener(72/*H*/, history::doClick);
         return history;
     }
     private JButton createOpenFileButton(){
         JButton openFile = new NoFocusableButton("Open file");
+        openFile.setToolTipText("Open file: F");
         openFile.addActionListener(l->{
             int returnVal = jFileChooser.showOpenDialog(parent);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -84,14 +89,16 @@ public class HeaderPanel extends JPanel {
                 }
             }
         });
+        mediaPlayerComponent.addEventToKeyListener(70/*F*/, openFile::doClick);
         return openFile;
     }
     private JButton createEnterUrlButton(){
         JButton enterURL = new NoFocusableButton("Stream from url");
+        enterURL.setToolTipText("Open url: U");
         enterURL.addActionListener(l->{
             String url = (String) JOptionPane.showInputDialog(
                     parent,
-                    "Enter m3u url:\n",
+                    "Enter media url:\n",
                     parent.getTitle(),
                     JOptionPane.PLAIN_MESSAGE,
                     null, null, dataSaver.getConfiguration().lastUrl);
@@ -104,6 +111,7 @@ public class HeaderPanel extends JPanel {
                 dataSaver.save();
             }
         });
+        mediaPlayerComponent.addEventToKeyListener(85/*U*/, enterURL::doClick);
         return enterURL;
     }
 }

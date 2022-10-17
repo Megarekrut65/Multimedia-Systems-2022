@@ -11,10 +11,7 @@ import uk.co.caprica.vlcj.player.embedded.fullscreen.adaptive.AdaptiveFullScreen
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 public class MediaPlayer{
     private final Dimension MIN_SIZE = new Dimension(500, 400);
@@ -95,6 +92,5 @@ public class MediaPlayer{
             mediaPlayerComponent.mediaPlayer().media().prepare(last);
             mediaPlayerComponent.mediaPlayer().media().startPaused(last);
         }
-        //mediaPlayerComponent.mediaPlayer().fullScreen().toggle();
     }
 }

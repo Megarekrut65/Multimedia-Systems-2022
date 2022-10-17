@@ -7,9 +7,7 @@ import uk.co.caprica.vlcj.player.base.State;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +25,22 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
         mediaPlayer().events().addMediaPlayerEventListener(mediaPlayerListener);
         if (dataSaver.getConfiguration().pinned) hidingThread.pin();
         mediaPlayer().audio().setVolume(dataSaver.getConfiguration().volume);
+        setKeys();
+        videoSurfaceComponent().addMouseListener(createListener());
+    }
+    private MouseListener createListener(){
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent event) {
+                if (event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
+                    mediaPlayer().fullScreen().set(!mediaPlayer().fullScreen().isFullScreen());
+                    mediaPlayer().controls().pause();
+                }
+                if(event.getClickCount() == 1&& event.getButton() == MouseEvent.BUTTON1){
+                    mediaPlayer().controls().pause();
+                }
+            }
+        };
     }
     public void addEventToKeyListener(int key, Action action){
         Action act = keyMap.get(key);
@@ -39,10 +53,17 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
         }
         keyMap.put(key, action);
     }
+    private void setKeys(){
+        keyMap.put(32/*SPACE*/, ()->mediaPlayer().controls().pause());
+        keyMap.put(37/*LEFT*/, this::rewindButton);
+        keyMap.put(39/*RIGHT*/, this::forwardButton);
+        keyMap.put(27/*RIGHT*/, ()->mediaPlayer().fullScreen().set(false));
+        keyMap.put(83/*S*/, ()->mediaPlayer().controls().stop());
+    }
     private void setKeyListener(){
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
+            hidingThread.moving();
             if(e.getID() != KeyEvent.KEY_PRESSED) return false;
-            System.out.println("Manager: " + e.getKeyCode());
             Action action = keyMap.get(e.getKeyCode());
             if(action != null) action.doAction();
             return false;
