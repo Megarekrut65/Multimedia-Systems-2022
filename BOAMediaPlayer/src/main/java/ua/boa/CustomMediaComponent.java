@@ -6,19 +6,47 @@ import uk.co.caprica.vlcj.media.*;
 import uk.co.caprica.vlcj.player.base.State;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
+import java.awt.*;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
     private final DataSaver dataSaver;
     private final MediaPlayerListener mediaPlayerListener;
     private final HidingThread hidingThread;
+    private final Map<Integer, Action> keyMap;
     public CustomMediaComponent(DataSaver dataSaver, HidingThread hidingThread, MediaPlayerListener mediaPlayerListener) {
         this.dataSaver = dataSaver;
         this.hidingThread = hidingThread;
         this.mediaPlayerListener = mediaPlayerListener;
+        keyMap = new HashMap<>();
+        setKeyListener();
         mediaPlayer().events().addMediaPlayerEventListener(mediaPlayerListener);
         if (dataSaver.getConfiguration().pinned) hidingThread.pin();
         mediaPlayer().audio().setVolume(dataSaver.getConfiguration().volume);
+    }
+    public void addEventToKeyListener(int key, Action action){
+        Action act = keyMap.get(key);
+        if(act != null){
+            keyMap.put(key, ()->{
+                act.doAction();
+                action.doAction();
+            });
+            return;
+        }
+        keyMap.put(key, action);
+    }
+    private void setKeyListener(){
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
+            if(e.getID() != KeyEvent.KEY_PRESSED) return false;
+            System.out.println("Manager: " + e.getKeyCode());
+            Action action = keyMap.get(e.getKeyCode());
+            if(action != null) action.doAction();
+            return false;
+        });
     }
     public void unpinPanels() {
         hidingThread.unpin();

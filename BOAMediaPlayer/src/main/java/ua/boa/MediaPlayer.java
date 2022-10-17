@@ -11,6 +11,8 @@ import uk.co.caprica.vlcj.player.embedded.fullscreen.adaptive.AdaptiveFullScreen
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -38,7 +40,6 @@ public class MediaPlayer{
         mainPanel = new JPanel();
         panelSettings();
         frameSettings();
-        hidingThread.start();
     }
     private void mediaComponentSettings(){
         mediaPlayerComponent.mediaPlayer().controls().setRepeat(true);
@@ -87,6 +88,7 @@ public class MediaPlayer{
     }
     public void open(){
         jFrame.setVisible(true);
+        hidingThread.start();
         String last = dataSaver.getConfiguration().lastPath;
         if(last != null && !last.equals("")){
             fileNamePanel.setText(last);

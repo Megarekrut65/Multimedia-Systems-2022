@@ -3,6 +3,7 @@ package ua.boa.panels;
 import ua.boa.CustomButton;
 import ua.boa.CustomMediaComponent;
 import ua.boa.IconsLoader;
+import ua.boa.NoFocusableButton;
 import ua.boa.savers.DataSaver;
 
 import javax.swing.*;
@@ -50,7 +51,7 @@ public class HeaderPanel extends JPanel {
         return pin;
     }
     private JButton createHistoryButton(){
-        JButton history = new JButton("History");
+        JButton history = new NoFocusableButton("History");
         history.addActionListener(l->{
             String path = (String) JOptionPane.showInputDialog(
                     parent,
@@ -70,7 +71,7 @@ public class HeaderPanel extends JPanel {
         return history;
     }
     private JButton createOpenFileButton(){
-        JButton openFile = new JButton("Open file");
+        JButton openFile = new NoFocusableButton("Open file");
         openFile.addActionListener(l->{
             int returnVal = jFileChooser.showOpenDialog(parent);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -86,7 +87,7 @@ public class HeaderPanel extends JPanel {
         return openFile;
     }
     private JButton createEnterUrlButton(){
-        JButton enterURL = new JButton("Stream from url");
+        JButton enterURL = new NoFocusableButton("Stream from url");
         enterURL.addActionListener(l->{
             String url = (String) JOptionPane.showInputDialog(
                     parent,

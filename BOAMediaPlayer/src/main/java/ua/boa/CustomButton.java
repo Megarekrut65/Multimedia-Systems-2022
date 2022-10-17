@@ -2,8 +2,10 @@ package ua.boa;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
-public class CustomButton extends JButton {
+public class CustomButton extends NoFocusableButton {
     private final Color PRESSED_COLOR = new Color(0,0,0,1);
     private final Color RELEASED_COLOR = new Color(0,0,0,0);
     private final int width;
