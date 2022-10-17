@@ -6,6 +6,8 @@ import uk.co.caprica.vlcj.media.*;
 import uk.co.caprica.vlcj.player.base.State;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
+import java.awt.event.KeyEvent;
+
 public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
     private final DataSaver dataSaver;
     private final MediaPlayerListener mediaPlayerListener;

@@ -7,6 +7,7 @@ import ua.boa.panels.ControlsPanel;
 import ua.boa.panels.FileNamePanel;
 import ua.boa.panels.HeaderPanel;
 import ua.boa.savers.DataSaver;
+import uk.co.caprica.vlcj.player.embedded.fullscreen.adaptive.AdaptiveFullScreenStrategy;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,10 +32,10 @@ public class MediaPlayer{
         fileNamePanel = new FileNamePanel();
         mediaPlayerListener = new MediaPlayerListener(dataSaver, fileNamePanel);
         mediaPlayerComponent = new CustomMediaComponent(dataSaver, hidingThread, mediaPlayerListener);
+        jFrame = new JFrame(title);
         mediaComponentSettings();
         size = new Dimension(width, height);
         mainPanel = new JPanel();
-        jFrame = new JFrame(title);
         panelSettings();
         frameSettings();
         hidingThread.start();
@@ -42,6 +43,8 @@ public class MediaPlayer{
     private void mediaComponentSettings(){
         mediaPlayerComponent.mediaPlayer().controls().setRepeat(true);
         mediaPlayerComponent.add(fileNamePanel, BorderLayout.PAGE_END);
+        mediaPlayerComponent.mediaPlayer().fullScreen().strategy(
+                new AdaptiveFullScreenStrategy(jFrame));
     }
     private void panelSettings(){
         mainPanel.setLayout(new BorderLayout());
@@ -90,5 +93,6 @@ public class MediaPlayer{
             mediaPlayerComponent.mediaPlayer().media().prepare(last);
             mediaPlayerComponent.mediaPlayer().media().startPaused(last);
         }
+        //mediaPlayerComponent.mediaPlayer().fullScreen().toggle();
     }
 }
