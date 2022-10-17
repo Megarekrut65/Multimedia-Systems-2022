@@ -28,6 +28,7 @@ public class HeaderPanel extends JPanel {
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
         buttons.add(createOpenFileButton());
         buttons.add(createEnterUrlButton());
+        buttons.add(createHistoryButton());
         add(buttons, BorderLayout.WEST);
         add(createPinButton(), BorderLayout.EAST);
     }
@@ -48,6 +49,26 @@ public class HeaderPanel extends JPanel {
         });
         return pin;
     }
+    private JButton createHistoryButton(){
+        JButton history = new JButton("History");
+        history.addActionListener(l->{
+            String path = (String) JOptionPane.showInputDialog(
+                    parent,
+                    "Select file:\n",
+                    parent.getTitle(),
+                    JOptionPane.PLAIN_MESSAGE,
+                    null, dataSaver.getConfiguration().history.toArray(), 0);
+            if (path != null && path.length() > 0){
+                mediaPlayerComponent.mediaPlayer().media().prepare(path);
+                mediaPlayerComponent.mediaPlayer().media().startPaused(path);
+                mediaPlayerComponent.mediaPlayer().controls().start();
+                dataSaver.getConfiguration().lastPath = path;
+                dataSaver.addHistory(path);
+                dataSaver.save();
+            }
+        });
+        return history;
+    }
     private JButton createOpenFileButton(){
         JButton openFile = new JButton("Open file");
         openFile.addActionListener(l->{
@@ -56,6 +77,7 @@ public class HeaderPanel extends JPanel {
                 File file = jFileChooser.getSelectedFile();
                 if(file.exists()) {
                     dataSaver.getConfiguration().lastPath = file.getPath();
+                    dataSaver.addHistory(file.getPath());
                     dataSaver.save();
                     mediaPlayerComponent.mediaPlayer().media().startPaused(file.getPath());
                 }
@@ -77,6 +99,7 @@ public class HeaderPanel extends JPanel {
                 mediaPlayerComponent.playButton();
                 dataSaver.getConfiguration().lastPath = url;
                 dataSaver.getConfiguration().lastUrl = url;
+                dataSaver.addHistory(url);
                 dataSaver.save();
             }
         });

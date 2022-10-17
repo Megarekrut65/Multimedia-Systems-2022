@@ -1,30 +1,15 @@
 package ua.boa.savers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Configuration implements Serializable {
     public String lastPath = "";
     public String lastUrl = "";
     public int volume = 50;
     public boolean pinned = false;
-
-    public Configuration(String lastPath, String lastUrl, int volume, boolean pinned) {
-        this.lastPath = lastPath;
-        this.lastUrl = lastUrl;
-        this.volume = volume;
-        this.pinned = pinned;
-    }
-
+    public ArrayList<String> history = new ArrayList<>();
     public Configuration() {
-    }
-
-    @Override
-    public String toString() {
-        return "Configuration{" +
-                "lastPath='" + lastPath + '\'' +
-                ", lastUrl='" + lastUrl + '\'' +
-                ", volume=" + volume +
-                ", pinned=" + pinned +
-                '}';
     }
 }

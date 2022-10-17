@@ -1,6 +1,9 @@
 package ua.boa.savers;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class DataSaver {
     private Configuration configuration;
@@ -39,5 +42,17 @@ public class DataSaver {
 
     public Configuration getConfiguration() {
         return configuration;
+    }
+
+    public void addHistory(String path) {
+        int index = configuration.history.indexOf(path);
+        if(index == -1){
+            if(configuration.history.size() >= 20) configuration.history.remove(configuration.history.size()-1);
+            configuration.history.add(0, path);
+            return;
+        }
+        if(index == 0) return;
+        configuration.history.remove(path);
+        configuration.history.add(0, path);
     }
 }
