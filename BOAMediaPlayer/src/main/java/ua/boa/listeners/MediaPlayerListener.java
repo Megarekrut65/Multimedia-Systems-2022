@@ -36,9 +36,8 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
             String last = dataSaver.getConfiguration().lastPath;
             if(last != null && !last.equals("")) fileNamePanel.setText(last);
             if(timeLabel == null) return;
-            InfoApi infoApi = mediaPlayer.media().info();
-            if(infoApi == null) return;
-            timeLabel.setText(TimeConvector.convert(0) + "/" + TimeConvector.convert(infoApi.duration()));
+            timeLabel.setText(TimeConvector.convert(0) + "/" +
+                    TimeConvector.convert(mediaPlayer.status().length()));
         });
     }
 
@@ -84,18 +83,15 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
-        SwingUtilities.invokeLater(()->{
-            if(timeLabel == null) return;
-            InfoApi infoApi = mediaPlayer.media().info();
-            if(infoApi == null) return;
-            timeLabel.setText(TimeConvector.convert(newTime) + "/" + TimeConvector.convert(infoApi.duration()));
-        });
     }
 
     @Override
     public void positionChanged(MediaPlayer mediaPlayer, float newPosition) {
         SwingUtilities.invokeLater(()->{
             if(currentSlider != null) currentSlider.setValue((int) (100000*newPosition));
+            if(timeLabel == null) return;
+            timeLabel.setText(TimeConvector.convert(mediaPlayer.status().time())
+                    + "/" + TimeConvector.convert(mediaPlayer.status().length()));
         });
     }
 

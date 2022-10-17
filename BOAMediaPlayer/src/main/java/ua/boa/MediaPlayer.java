@@ -30,7 +30,7 @@ public class MediaPlayer{
         dataSaver = new DataSaver("src/main/resources/data/data.conf");
         fileNamePanel = new FileNamePanel();
         mediaPlayerListener = new MediaPlayerListener(dataSaver, fileNamePanel);
-        mediaPlayerComponent = new CustomMediaComponent(dataSaver, hidingThread);
+        mediaPlayerComponent = new CustomMediaComponent(dataSaver, hidingThread, mediaPlayerListener);
         mediaComponentSettings();
         size = new Dimension(width, height);
         mainPanel = new JPanel();
@@ -41,7 +41,6 @@ public class MediaPlayer{
     }
     private void mediaComponentSettings(){
         mediaPlayerComponent.mediaPlayer().controls().setRepeat(true);
-        mediaPlayerComponent.mediaPlayer().events().addMediaPlayerEventListener(mediaPlayerListener);
         mediaPlayerComponent.add(fileNamePanel, BorderLayout.PAGE_END);
     }
     private void panelSettings(){

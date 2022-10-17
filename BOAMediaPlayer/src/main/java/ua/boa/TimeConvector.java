@@ -4,7 +4,7 @@ public class TimeConvector {
    public static String convert(long time){
        long seconds = (time/1000)%60,
             minutes = (time/60000)%60,
-            hours = time/360000;
+            hours = time/3600000;
        return makeString(hours) + ":" + makeString(minutes) + ":" + makeString(seconds);
    }
    private static String makeString(long value){

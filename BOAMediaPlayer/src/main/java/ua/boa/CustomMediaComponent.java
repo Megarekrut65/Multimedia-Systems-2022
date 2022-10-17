@@ -1,15 +1,20 @@
 package ua.boa;
 
+import ua.boa.listeners.MediaPlayerListener;
 import ua.boa.savers.DataSaver;
-import uk.co.caprica.vlcj.media.InfoApi;
+import uk.co.caprica.vlcj.media.*;
+import uk.co.caprica.vlcj.player.base.State;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
 public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
     private final DataSaver dataSaver;
+    private final MediaPlayerListener mediaPlayerListener;
     private final HidingThread hidingThread;
-    public CustomMediaComponent(DataSaver dataSaver, HidingThread hidingThread) {
+    public CustomMediaComponent(DataSaver dataSaver, HidingThread hidingThread, MediaPlayerListener mediaPlayerListener) {
         this.dataSaver = dataSaver;
         this.hidingThread = hidingThread;
+        this.mediaPlayerListener = mediaPlayerListener;
+        mediaPlayer().events().addMediaPlayerEventListener(mediaPlayerListener);
         if (dataSaver.getConfiguration().pinned) hidingThread.pin();
         mediaPlayer().audio().setVolume(dataSaver.getConfiguration().volume);
     }
@@ -39,11 +44,13 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
     }
     public void rewindButton(){
         hidingThread.moving();
-        mediaPlayer().controls().skipTime(-1000);
+        mediaPlayer().controls().skipPosition(-0.05f);
+        mediaPlayerListener.positionChanged(mediaPlayer(), mediaPlayer().status().position());
     }
     public void forwardButton(){
         hidingThread.moving();
-        mediaPlayer().controls().skipTime(1000);
+        mediaPlayer().controls().skipPosition(0.05f);
+        mediaPlayerListener.positionChanged(mediaPlayer(), mediaPlayer().status().position());
     }
     public void changePosition(float position){
         hidingThread.moving();
