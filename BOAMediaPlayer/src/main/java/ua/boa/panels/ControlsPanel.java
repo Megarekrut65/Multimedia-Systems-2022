@@ -17,6 +17,7 @@ public class ControlsPanel extends JPanel {
         setLayout(new BorderLayout());
         add(new PlaybackPanel(mediaPlayerComponent, mediaPlayerListener), BorderLayout.NORTH);
         add(new ButtonsPanel(mediaPlayerComponent, icons), BorderLayout.WEST);
+        add(new TimePanel(mediaPlayerListener), BorderLayout.CENTER);
         add(new VolumePanel(mediaPlayerComponent, icons), BorderLayout.EAST);
     }
 

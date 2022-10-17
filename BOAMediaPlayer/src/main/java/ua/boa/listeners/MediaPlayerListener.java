@@ -1,8 +1,10 @@
 package ua.boa.listeners;
 
+import ua.boa.TimeConvector;
 import ua.boa.panels.FileNamePanel;
 import ua.boa.ToastMessage;
 import ua.boa.savers.DataSaver;
+import uk.co.caprica.vlcj.media.InfoApi;
 import uk.co.caprica.vlcj.media.MediaRef;
 import uk.co.caprica.vlcj.media.TrackType;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
@@ -12,6 +14,7 @@ import javax.swing.*;
 
 public class MediaPlayerListener implements MediaPlayerEventListener {
     private JProgressBar currentSlider;
+    private JLabel timeLabel;
     private final DataSaver dataSaver;
     private final FileNamePanel fileNamePanel;
     public MediaPlayerListener(DataSaver dataSaver, FileNamePanel fileNamePanel) {
@@ -23,14 +26,19 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
     public void setSlider(JProgressBar slider){
         currentSlider = slider;
     }
+    public void setTimeLabel(JLabel label) {
+        timeLabel = label;
+    }
     @Override
     public void mediaChanged(MediaPlayer mediaPlayer, MediaRef media) {
         SwingUtilities.invokeLater(()->{
             if(currentSlider != null) currentSlider.setValue(0);
             String last = dataSaver.getConfiguration().lastPath;
-            if(last != null && !last.equals("")){
-                fileNamePanel.setText(last);
-            }
+            if(last != null && !last.equals("")) fileNamePanel.setText(last);
+            if(timeLabel == null) return;
+            InfoApi infoApi = mediaPlayer.media().info();
+            if(infoApi == null) return;
+            timeLabel.setText(TimeConvector.convert(0) + "/" + TimeConvector.convert(infoApi.duration()));
         });
     }
 
@@ -76,7 +84,12 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
-
+        SwingUtilities.invokeLater(()->{
+            if(timeLabel == null) return;
+            InfoApi infoApi = mediaPlayer.media().info();
+            if(infoApi == null) return;
+            timeLabel.setText(TimeConvector.convert(newTime) + "/" + TimeConvector.convert(infoApi.duration()));
+        });
     }
 
     @Override
@@ -174,4 +187,5 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
     @Override
     public void mediaPlayerReady(MediaPlayer mediaPlayer) {
     }
+
 }
