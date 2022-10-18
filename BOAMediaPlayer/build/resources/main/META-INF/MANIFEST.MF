@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: ua.boa.Main
-Class-Path: vlcj-4.8.2.jar vlcj-natives-4.8.1.jar jna-jpms-5.12.1.jar jna-platform-jpms-5.12.1.jar
