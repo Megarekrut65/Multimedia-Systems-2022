@@ -15,7 +15,7 @@ import java.awt.event.*;
 
 public class MediaPlayer{
     private final Dimension MIN_SIZE = new Dimension(500, 400);
-    private final IconsLoader ICONS = new IconsLoader();
+    private final IconsLoader ICONS;
     private final Dimension size;
     private final JFrame jFrame;
     private final JPanel mainPanel;
@@ -28,6 +28,7 @@ public class MediaPlayer{
     public MediaPlayer(String title, int width, int height){
         hidingThread = new HidingThread(8);
         dataSaver = new DataSaver("src/main/resources/data/data.conf");
+        ICONS = new IconsLoader();
         fileNamePanel = new FileNamePanel();
         mediaPlayerListener = new MediaPlayerListener(dataSaver, fileNamePanel);
         mediaPlayerComponent = new CustomMediaComponent(dataSaver, hidingThread, mediaPlayerListener);

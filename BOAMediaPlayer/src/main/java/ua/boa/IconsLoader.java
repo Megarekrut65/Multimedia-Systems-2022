@@ -15,15 +15,15 @@ public class IconsLoader {
     public final ImageIcon PIN_ICON;
     public final ImageIcon UNPIN_ICON;
     public IconsLoader(){
-        ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/icon.png")));
-        PLAY_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/play.png")));
-        PAUSE_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/pause.png")));
-        STOP_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/stop.png")));
-        FORWARD_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/forward.png")));
-        REWIND_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/rewind.png")));
-        VOLUME_ON_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/audio.png")));
-        VOLUME_OFF_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/silence.png")));
-        PIN_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/pin.png")));
-        UNPIN_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/unpin.png")));
+        ICON = new ImageIcon("src/main/resources/images/icon.png");
+        PLAY_ICON = new ImageIcon("src/main/resources/images/play.png");
+        PAUSE_ICON = new ImageIcon("src/main/resources/images/pause.png");
+        STOP_ICON = new ImageIcon("src/main/resources/images/stop.png");
+        FORWARD_ICON = new ImageIcon("src/main/resources/images/forward.png");
+        REWIND_ICON = new ImageIcon("src/main/resources/images/rewind.png");
+        VOLUME_ON_ICON = new ImageIcon("src/main/resources/images/audio.png");
+        VOLUME_OFF_ICON = new ImageIcon("src/main/resources/images/silence.png");
+        PIN_ICON = new ImageIcon("src/main/resources/images/pin.png");
+        UNPIN_ICON = new ImageIcon("src/main/resources/images/unpin.png");
     }
 }
