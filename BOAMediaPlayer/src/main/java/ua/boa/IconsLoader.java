@@ -2,6 +2,9 @@ package ua.boa;
 
 import javax.swing.*;
 
+/**
+ * Class with icons for app
+ */
 public class IconsLoader {
     public final ImageIcon ICON;
     public final ImageIcon PLAY_ICON;

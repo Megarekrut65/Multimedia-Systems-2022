@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Class for hiding panels after fixed time ran out
+ */
 public class HidingThread extends Thread {
-    private final AtomicInteger time;
-    private final int timeToHide;
-    private final List<Action> hide;
-    private final List<Action> show;
-    private final AtomicBoolean pinned;
+    private final AtomicInteger time;/*Current time that is running out*/
+    private final int timeToHide;/*Fixed time after it ran out panels will be hidden*/
+    private final List<Action> hide;/*List of action when time ran out*/
+    private final List<Action> show;/*List of action when time is start to run out*/
+    private final AtomicBoolean pinned;/*Time doesn't run out when it is true*/
 
     public HidingThread(int timeToHide) {
         hide = new ArrayList<>();
@@ -20,10 +23,16 @@ public class HidingThread extends Thread {
         this.timeToHide = timeToHide;
     }
 
+    /**
+     * @param hide - action to call when time ran out
+     */
     public void addHideAction(Action hide) {
         this.hide.add(hide);
     }
 
+    /**
+     * @param show - action to call when time starts to ran out
+     */
     public void addShowAction(Action show) {
         this.show.add(show);
     }
@@ -46,6 +55,9 @@ public class HidingThread extends Thread {
         }
     }
 
+    /**
+     * When mouse moved time is reassigned to max time
+     */
     public void moving() {
         synchronized (time) {
             if (time.get() <= 0) show.forEach(Action::doAction);

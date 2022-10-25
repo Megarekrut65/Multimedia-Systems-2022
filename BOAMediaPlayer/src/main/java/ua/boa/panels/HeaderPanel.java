@@ -11,12 +11,15 @@ import java.awt.*;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Panel with header buttons.
+ */
 public class HeaderPanel extends JPanel {
-    private final JFileChooser jFileChooser;
-    private final CustomMediaComponent mediaPlayerComponent;
-    private final JFrame parent;
-    private final DataSaver dataSaver;
-    private final IconsLoader iconsLoader;
+    private final JFileChooser jFileChooser;/*Class for choosing local file*/
+    private final CustomMediaComponent mediaPlayerComponent;/*Component to control media*/
+    private final JFrame parent;/*Main frame*/
+    private final DataSaver dataSaver;/*Class to saving app configuration and other data*/
+    private final IconsLoader iconsLoader;/*Icons for buttons*/
 
     public HeaderPanel(CustomMediaComponent mediaPlayerComponent, JFrame parent,
                        DataSaver dataSaver, IconsLoader icons) {
@@ -35,6 +38,9 @@ public class HeaderPanel extends JPanel {
         add(createPinButton(), BorderLayout.EAST);
     }
 
+    /**
+     * Creates button for pin and unpin panels
+     */
     private JButton createPinButton() {
         CustomButton pin = new CustomButton(dataSaver.getConfiguration().pinned
                 ? iconsLoader.UNPIN_ICON
@@ -55,6 +61,9 @@ public class HeaderPanel extends JPanel {
         return pin;
     }
 
+    /**
+     * Creates button that open history of opened files and urls
+     */
     private JButton createHistoryButton() {
         JButton history = new NoFocusableButton("History");
         history.setToolTipText("Open history: H");
@@ -78,6 +87,9 @@ public class HeaderPanel extends JPanel {
         return history;
     }
 
+    /**
+     * Creates button that open local file
+     */
     private JButton createOpenFileButton() {
         JButton openFile = new NoFocusableButton("Open file");
         openFile.setToolTipText("Open file: F");
@@ -97,6 +109,9 @@ public class HeaderPanel extends JPanel {
         return openFile;
     }
 
+    /**
+     * Creates button that open url with streaming video or audio
+     */
     private JButton createEnterUrlButton() {
         JButton enterURL = new NoFocusableButton("Stream from url");
         enterURL.setToolTipText("Open url: U");

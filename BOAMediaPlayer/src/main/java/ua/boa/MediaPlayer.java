@@ -14,6 +14,9 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+/**
+ * Media player window with buttons, events and media playing
+ */
 public class MediaPlayer {
     private final Dimension MIN_SIZE = new Dimension(500, 400);
     private final IconsLoader ICONS;

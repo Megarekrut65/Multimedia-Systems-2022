@@ -3,6 +3,9 @@ package ua.boa.savers;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Data class for saving it to file
+ */
 public class Configuration implements Serializable {
     public String lastPath = "";
     public String lastUrl = "";

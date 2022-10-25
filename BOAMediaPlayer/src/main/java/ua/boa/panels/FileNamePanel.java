@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
+/**
+ * Panel that contain label with file name.
+ */
 public class FileNamePanel extends JPanel {
     private final JLabel fileNameLabel;
 
@@ -16,6 +19,11 @@ public class FileNamePanel extends JPanel {
         add(Box.createVerticalStrut(20), BorderLayout.WEST);
     }
 
+    /**
+     * Changes text of label(file name)
+     *
+     * @param text - new text
+     */
     public void setText(String text) {
         fileNameLabel.setVisible(!Objects.equals(text, ""));
         fileNameLabel.setText(text + " ");

@@ -5,26 +5,24 @@ import ua.boa.savers.DataSaver;
 import uk.co.caprica.vlcj.media.InfoApi;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.HashMap;
-import java.util.Map;
 
+/**
+ * Media component for controls media
+ */
 public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
-    private final DataSaver dataSaver;
-    private final MediaPlayerListener mediaPlayerListener;
-    private final HidingThread hidingThread;
-    private final Map<Integer, Action> keyMap;
+    private final DataSaver dataSaver;/*Class for saving app data to file*/
+    private final MediaPlayerListener mediaPlayerListener;/*Listener of media events*/
+    private final HidingThread hidingThread;/*Class for hiding panels*/
+    private final KeyBoardController keyBoardController;/*Controller for adding actions to key(keyboard key)*/
 
     public CustomMediaComponent(DataSaver dataSaver, HidingThread hidingThread, MediaPlayerListener mediaPlayerListener) {
         this.dataSaver = dataSaver;
         this.hidingThread = hidingThread;
         this.mediaPlayerListener = mediaPlayerListener;
-        keyMap = new HashMap<>();
-        setKeyListener();
+        keyBoardController = new KeyBoardController(hidingThread);
         mediaPlayer().events().addMediaPlayerEventListener(mediaPlayerListener);
         if (dataSaver.getConfiguration().pinned) hidingThread.pin();
         mediaPlayer().audio().setVolume(dataSaver.getConfiguration().volume);
@@ -32,6 +30,9 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
         videoSurfaceComponent().addMouseListener(createListener());
     }
 
+    /**
+     * Creates listener for mouse click and mouse double click
+     */
     private MouseListener createListener() {
         return new MouseAdapter() {
             @Override
@@ -47,76 +48,92 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
         };
     }
 
+    /**
+     * Added action to key pressed event. When action for this key is already existed then creates complex action.
+     *
+     * @param key    - keyboard key code
+     * @param action - action to call it when key is pressed
+     */
     public void addEventToKeyListener(int key, Action action) {
-        Action act = keyMap.get(key);
-        if (act != null) {
-            keyMap.put(key, () -> {
-                act.doAction();
-                action.doAction();
-            });
-            return;
-        }
-        keyMap.put(key, action);
+        keyBoardController.addEventToKeyListener(key, action);
     }
 
+    /**
+     * Adds to key map default keys and actions
+     */
     private void setKeys() {
-        keyMap.put(32/*SPACE*/, () -> mediaPlayer().controls().pause());
-        keyMap.put(37/*LEFT*/, this::rewindButton);
-        keyMap.put(39/*RIGHT*/, this::forwardButton);
-        keyMap.put(27/*RIGHT*/, () -> mediaPlayer().fullScreen().set(false));
-        keyMap.put(83/*S*/, () -> mediaPlayer().controls().stop());
+        addEventToKeyListener(32/*SPACE*/, () -> mediaPlayer().controls().pause());
+        addEventToKeyListener(37/*LEFT*/, this::rewindButton);
+        addEventToKeyListener(39/*RIGHT*/, this::forwardButton);
+        addEventToKeyListener(27/*ESC*/, () -> mediaPlayer().fullScreen().set(false));
+        addEventToKeyListener(83/*S*/, this::stopButton);
     }
 
-    private void setKeyListener() {
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
-            hidingThread.moving();
-            if (e.getID() != KeyEvent.KEY_PRESSED) return false;
-            Action action = keyMap.get(e.getKeyCode());
-            if (action != null) action.doAction();
-            return false;
-        });
-    }
-
+    /**
+     * Unpins panels and save this state to file
+     */
     public void unpinPanels() {
         hidingThread.unpin();
         dataSaver.getConfiguration().pinned = false;
         dataSaver.save();
     }
 
+    /**
+     * Pins panels and save this state to file
+     */
     public void pinPanels() {
         hidingThread.pin();
         dataSaver.getConfiguration().pinned = true;
         dataSaver.save();
     }
 
+    /**
+     * Plays media
+     */
     public void playButton() {
         mediaPlayer().controls().play();
     }
 
+    /**
+     * Pauses media
+     */
     public void pauseButton() {
         mediaPlayer().controls().setPause(true);
     }
 
+    /**
+     * Stops media
+     */
     public void stopButton() {
-        hidingThread.moving();
         mediaPlayer().controls().stop();
         InfoApi info = mediaPlayer().media().info();
         if (info != null) mediaPlayer().media()
                 .startPaused(info.mrl());
     }
 
+    /**
+     * Rewinds media position for 5%
+     */
     public void rewindButton() {
         hidingThread.moving();
         mediaPlayer().controls().skipPosition(-0.05f);
         mediaPlayerListener.positionChanged(mediaPlayer(), mediaPlayer().status().position());
     }
 
+    /**
+     * Forwards media position for 5%
+     */
     public void forwardButton() {
         hidingThread.moving();
         mediaPlayer().controls().skipPosition(0.05f);
         mediaPlayerListener.positionChanged(mediaPlayer(), mediaPlayer().status().position());
     }
 
+    /**
+     * Changes media position
+     *
+     * @param position - new media position
+     */
     public void changePosition(float position) {
         hidingThread.moving();
         InfoApi info = mediaPlayer().media().info();
@@ -124,6 +141,11 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
                 .setTime((long) (info.duration() * position));
     }
 
+    /**
+     * Changes volume value and save it to file
+     *
+     * @param value - new volume value
+     */
     public void changeVolume(int value) {
         hidingThread.moving();
         mediaPlayer().audio().setVolume(value);
@@ -131,6 +153,9 @@ public class CustomMediaComponent extends EmbeddedMediaPlayerComponent {
         dataSaver.save();
     }
 
+    /**
+     * @return value of volume
+     */
     public int getVolume() {
         return dataSaver.getConfiguration().volume;
     }

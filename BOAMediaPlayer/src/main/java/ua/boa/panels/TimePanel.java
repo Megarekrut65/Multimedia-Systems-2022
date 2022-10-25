@@ -5,6 +5,9 @@ import ua.boa.listeners.MediaPlayerListener;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Panel for displaying current time and media duration
+ */
 public class TimePanel extends JPanel {
     public TimePanel(MediaPlayerListener mediaPlayerListener) {
         super(new BorderLayout());

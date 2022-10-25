@@ -6,11 +6,14 @@ import ua.boa.IconsLoader;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Panel for displaying volume value and changing it
+ */
 public class VolumePanel extends JPanel {
-    private final CustomMediaComponent mediaComponent;
-    private final JLabel volumeLabel;
-    private final ImageIcon imageOn;
-    private final ImageIcon imageOff;
+    private final CustomMediaComponent mediaComponent;/*Component to change volume value*/
+    private final JLabel volumeLabel;/*Label for volume image*/
+    private final ImageIcon imageOn;/*Image of volume is on*/
+    private final ImageIcon imageOff;/*Image of volume is off*/
 
     public VolumePanel(CustomMediaComponent mediaComponent, IconsLoader icons) {
         this.mediaComponent = mediaComponent;
@@ -26,10 +29,18 @@ public class VolumePanel extends JPanel {
         mediaComponent.addEventToKeyListener(40/*DOWN*/, () -> jSlider.setValue(jSlider.getValue() - 5));
     }
 
+    /**
+     * Creates image with fixed size
+     *
+     * @param imageIcon - icon of image
+     */
     private ImageIcon getScaledIcon(ImageIcon imageIcon) {
         return new ImageIcon(imageIcon.getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
     }
 
+    /**
+     * Creates slider for changing volume value
+     */
     private JSlider createVolumeSlider() {
         JSlider jSlider = new JSlider(0, 100, mediaComponent.getVolume());
         jSlider.setFocusable(false);

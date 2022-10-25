@@ -7,6 +7,9 @@ import ua.boa.listeners.MediaPlayerListener;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Panel with control parts like buttons, sliders and other
+ */
 public class ControlsPanel extends JPanel {
 
     public ControlsPanel(CustomMediaComponent mediaPlayerComponent,

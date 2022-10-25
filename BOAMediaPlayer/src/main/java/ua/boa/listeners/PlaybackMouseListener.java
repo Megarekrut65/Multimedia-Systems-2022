@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Listener for media slider that changes slider position when user clicks in slider or move it
+ */
 public class PlaybackMouseListener extends MouseAdapter {
     private final CustomMediaComponent mediaComponent;
 
@@ -13,6 +16,11 @@ public class PlaybackMouseListener extends MouseAdapter {
         this.mediaComponent = mediaComponent;
     }
 
+    /**
+     * Sets position of slider to position of mouse cursor
+     *
+     * @param e - mouse event
+     */
     private void mouse(MouseEvent e) {
         JProgressBar jProgressBar = (JProgressBar) e.getSource();
         float position = (float) e.getX() / jProgressBar.getWidth();

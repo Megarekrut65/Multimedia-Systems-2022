@@ -6,9 +6,18 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.RoundRectangle2D;
 
+/**
+ * Class for showing messages on main frame
+ */
 public class ToastMessage extends JFrame {
     private final int timeToShow;
 
+    /**
+     * @param imageIcon  - image of new window
+     * @param message    - message to show
+     * @param timeToShow - time of showing
+     * @param parent     - parent frame
+     */
     public ToastMessage(ImageIcon imageIcon, String message, int timeToShow, Component parent) {
         this.timeToShow = timeToShow;
         setUndecorated(true);
@@ -27,6 +36,9 @@ public class ToastMessage extends JFrame {
         });
     }
 
+    /**
+     * Displays message
+     */
     public void display() {
         try {
             setOpacity(1);

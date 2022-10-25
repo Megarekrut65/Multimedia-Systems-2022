@@ -2,9 +2,12 @@ package ua.boa.savers;
 
 import java.io.*;
 
+/**
+ * Class for saving app configuration and other data to file
+ */
 public class DataSaver {
-    private Configuration configuration;
-    private final String fileName;
+    private Configuration configuration;/*Data to save*/
+    private final String fileName;/*Path to file to save data*/
 
     public DataSaver(String fileName) {
         configuration = new Configuration();
@@ -27,6 +30,9 @@ public class DataSaver {
         }
     }
 
+    /**
+     * Saves all data to file
+     */
     public void save() {
         try (FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
             try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
@@ -37,10 +43,18 @@ public class DataSaver {
         }
     }
 
+    /**
+     * @return saved data from file
+     */
     public Configuration getConfiguration() {
         return configuration;
     }
 
+    /**
+     * Adds data to history list. But doesn't save it to file
+     *
+     * @param path - data to add to history
+     */
     public void addHistory(String path) {
         int index = configuration.history.indexOf(path);
         if (index == -1) {
