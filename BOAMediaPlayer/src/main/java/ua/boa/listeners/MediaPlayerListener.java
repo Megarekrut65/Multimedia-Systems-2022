@@ -43,7 +43,6 @@ public class MediaPlayerListener implements MediaPlayerEventListener {
 
     @Override
     public void opening(MediaPlayer mediaPlayer) {
-
     }
 
     @Override
