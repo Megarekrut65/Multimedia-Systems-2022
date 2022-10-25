@@ -3,13 +3,9 @@ package ua.boa.panels;
 import ua.boa.CustomMediaComponent;
 import ua.boa.listeners.MediaPlayerListener;
 import ua.boa.listeners.PlaybackMouseListener;
-import uk.co.caprica.vlcj.media.InfoApi;
-import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class PlaybackPanel extends JPanel {
     private final CustomMediaComponent mediaPlayerComponent;
@@ -21,7 +17,8 @@ public class PlaybackPanel extends JPanel {
         mediaPlayerListener.setSlider(jProgressBar);
         add(jProgressBar, BorderLayout.CENTER);
     }
-    private JProgressBar createSlider(){
+
+    private JProgressBar createSlider() {
         JProgressBar jProgressBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, 99999);
         PlaybackMouseListener playbackMouseListener = new PlaybackMouseListener(mediaPlayerComponent);
         jProgressBar.addMouseListener(playbackMouseListener);

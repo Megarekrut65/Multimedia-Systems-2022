@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class HidingThread extends Thread{
+public class HidingThread extends Thread {
     private final AtomicInteger time;
     private final int timeToHide;
     private final List<Action> hide;
@@ -19,12 +19,15 @@ public class HidingThread extends Thread{
         this.time = new AtomicInteger(timeToHide);
         this.timeToHide = timeToHide;
     }
-    public void addHideAction(Action hide){
+
+    public void addHideAction(Action hide) {
         this.hide.add(hide);
     }
-    public void addShowAction(Action show){
+
+    public void addShowAction(Action show) {
         this.show.add(show);
     }
+
     @Override
     public void run() {
         while (!Thread.interrupted()) {
@@ -32,8 +35,8 @@ public class HidingThread extends Thread{
                 Thread.sleep(1000);
                 if (time.get() > 0) time.decrementAndGet();
                 if (time.get() == 0) {
-                    if(!pinned.get()) hide.forEach(Action::doAction);
-                    synchronized (time){
+                    if (!pinned.get()) hide.forEach(Action::doAction);
+                    synchronized (time) {
                         time.wait();
                     }
                 }
@@ -42,17 +45,20 @@ public class HidingThread extends Thread{
             }
         }
     }
-    public void moving(){
-        synchronized (time){
-            if(time.get() <= 0) show.forEach(Action::doAction);
+
+    public void moving() {
+        synchronized (time) {
+            if (time.get() <= 0) show.forEach(Action::doAction);
             time.set(timeToHide);
             time.notify();
         }
     }
-    public void pin(){
+
+    public void pin() {
         pinned.set(true);
     }
-    public void unpin(){
+
+    public void unpin() {
         pinned.set(false);
         moving();
     }

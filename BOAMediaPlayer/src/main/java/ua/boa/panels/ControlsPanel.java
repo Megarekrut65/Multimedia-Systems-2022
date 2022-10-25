@@ -1,6 +1,5 @@
 package ua.boa.panels;
 
-import ua.boa.CustomButton;
 import ua.boa.CustomMediaComponent;
 import ua.boa.IconsLoader;
 import ua.boa.listeners.MediaPlayerListener;

@@ -7,7 +7,7 @@ import java.util.Objects;
 public class FileNamePanel extends JPanel {
     private final JLabel fileNameLabel;
 
-    public FileNamePanel(){
+    public FileNamePanel() {
         super(new BorderLayout());
         fileNameLabel = new JLabel();
         fileNameLabel.setFont(new Font("arial", Font.BOLD, 15));
@@ -15,7 +15,8 @@ public class FileNamePanel extends JPanel {
         add(fileNameLabel, BorderLayout.EAST);
         add(Box.createVerticalStrut(20), BorderLayout.WEST);
     }
-    public void setText(String text){
+
+    public void setText(String text) {
         fileNameLabel.setVisible(!Objects.equals(text, ""));
         fileNameLabel.setText(text + " ");
     }

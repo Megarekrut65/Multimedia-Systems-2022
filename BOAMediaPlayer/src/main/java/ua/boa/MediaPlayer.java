@@ -11,9 +11,10 @@ import uk.co.caprica.vlcj.player.embedded.fullscreen.adaptive.AdaptiveFullScreen
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-public class MediaPlayer{
+public class MediaPlayer {
     private final Dimension MIN_SIZE = new Dimension(500, 400);
     private final IconsLoader ICONS;
     private final Dimension size;
@@ -25,7 +26,7 @@ public class MediaPlayer{
     private final MediaPlayerListener mediaPlayerListener;
     private final HidingThread hidingThread;
 
-    public MediaPlayer(String title, int width, int height){
+    public MediaPlayer(String title, int width, int height) {
         hidingThread = new HidingThread(8);
         dataSaver = new DataSaver("src/main/resources/data/data.conf");
         ICONS = new IconsLoader();
@@ -39,13 +40,15 @@ public class MediaPlayer{
         panelSettings();
         frameSettings();
     }
-    private void mediaComponentSettings(){
+
+    private void mediaComponentSettings() {
         mediaPlayerComponent.mediaPlayer().controls().setRepeat(true);
         mediaPlayerComponent.add(fileNamePanel, BorderLayout.PAGE_END);
         mediaPlayerComponent.mediaPlayer().fullScreen().strategy(
                 new AdaptiveFullScreenStrategy(jFrame));
     }
-    private void panelSettings(){
+
+    private void panelSettings() {
         mainPanel.setLayout(new BorderLayout());
         HeaderPanel header = new HeaderPanel(mediaPlayerComponent, jFrame, dataSaver, ICONS);
         mainPanel.add(new ContainerPanel(header), BorderLayout.NORTH);
@@ -53,12 +56,12 @@ public class MediaPlayer{
         mainPanel.add(mediaPlayerComponent, BorderLayout.CENTER);
         JPanel controls = new ControlsPanel(mediaPlayerComponent, mediaPlayerListener, ICONS);
         mainPanel.add(new ContainerPanel(controls), BorderLayout.PAGE_END);
-        hidingThread.addShowAction(()->{
+        hidingThread.addShowAction(() -> {
             header.setVisible(true);
             controls.setVisible(true);
             fileNamePanel.setText(dataSaver.getConfiguration().lastPath);
         });
-        hidingThread.addHideAction(()->{
+        hidingThread.addHideAction(() -> {
             header.setVisible(false);
             controls.setVisible(false);
             fileNamePanel.setText("");
@@ -67,7 +70,8 @@ public class MediaPlayer{
         mainPanel.addMouseMotionListener(mouseListener);
         mainPanel.addMouseListener(mouseListener);
     }
-    private void frameSettings(){
+
+    private void frameSettings() {
         jFrame.setResizable(true);
         jFrame.setMinimumSize(MIN_SIZE);
         jFrame.setSize(size);
@@ -84,11 +88,12 @@ public class MediaPlayer{
             }
         });
     }
-    public void open(){
+
+    public void open() {
         jFrame.setVisible(true);
         hidingThread.start();
         String last = dataSaver.getConfiguration().lastPath;
-        if(last != null && !last.equals("")){
+        if (last != null && !last.equals("")) {
             fileNamePanel.setText(last);
             mediaPlayerComponent.mediaPlayer().media().prepare(last);
             mediaPlayerComponent.mediaPlayer().media().startPaused(last);

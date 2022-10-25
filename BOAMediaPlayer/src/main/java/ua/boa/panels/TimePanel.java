@@ -1,6 +1,5 @@
 package ua.boa.panels;
 
-import ua.boa.CustomMediaComponent;
 import ua.boa.listeners.MediaPlayerListener;
 
 import javax.swing.*;

@@ -17,8 +17,9 @@ public class HeaderPanel extends JPanel {
     private final JFrame parent;
     private final DataSaver dataSaver;
     private final IconsLoader iconsLoader;
+
     public HeaderPanel(CustomMediaComponent mediaPlayerComponent, JFrame parent,
-                       DataSaver dataSaver, IconsLoader icons){
+                       DataSaver dataSaver, IconsLoader icons) {
         super(new BorderLayout());
         this.mediaPlayerComponent = mediaPlayerComponent;
         this.parent = parent;
@@ -33,15 +34,16 @@ public class HeaderPanel extends JPanel {
         add(buttons, BorderLayout.WEST);
         add(createPinButton(), BorderLayout.EAST);
     }
-    private JButton createPinButton(){
+
+    private JButton createPinButton() {
         CustomButton pin = new CustomButton(dataSaver.getConfiguration().pinned
-                ?iconsLoader.UNPIN_ICON
-                :iconsLoader.PIN_ICON, 20,20);
+                ? iconsLoader.UNPIN_ICON
+                : iconsLoader.PIN_ICON, 20, 20);
         pin.setToolTipText("Pin/unpin: P");
         AtomicBoolean pinned = new AtomicBoolean(dataSaver.getConfiguration().pinned);
-        pin.addActionListener(l->{
+        pin.addActionListener(l -> {
             pinned.set(!pinned.get());
-            if(pinned.get()){
+            if (pinned.get()) {
                 mediaPlayerComponent.pinPanels();
                 pin.setImage(iconsLoader.UNPIN_ICON);
                 return;
@@ -52,17 +54,18 @@ public class HeaderPanel extends JPanel {
         mediaPlayerComponent.addEventToKeyListener(80/*P*/, pin::doClick);
         return pin;
     }
-    private JButton createHistoryButton(){
+
+    private JButton createHistoryButton() {
         JButton history = new NoFocusableButton("History");
         history.setToolTipText("Open history: H");
-        history.addActionListener(l->{
+        history.addActionListener(l -> {
             String path = (String) JOptionPane.showInputDialog(
                     parent,
                     "Select file:\n",
                     parent.getTitle(),
                     JOptionPane.PLAIN_MESSAGE,
                     null, dataSaver.getConfiguration().history.toArray(), 0);
-            if (path != null && path.length() > 0){
+            if (path != null && path.length() > 0) {
                 mediaPlayerComponent.mediaPlayer().media().prepare(path);
                 mediaPlayerComponent.mediaPlayer().media().startPaused(path);
                 mediaPlayerComponent.mediaPlayer().controls().start();
@@ -74,14 +77,15 @@ public class HeaderPanel extends JPanel {
         mediaPlayerComponent.addEventToKeyListener(72/*H*/, history::doClick);
         return history;
     }
-    private JButton createOpenFileButton(){
+
+    private JButton createOpenFileButton() {
         JButton openFile = new NoFocusableButton("Open file");
         openFile.setToolTipText("Open file: F");
-        openFile.addActionListener(l->{
+        openFile.addActionListener(l -> {
             int returnVal = jFileChooser.showOpenDialog(parent);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = jFileChooser.getSelectedFile();
-                if(file.exists()) {
+                if (file.exists()) {
                     dataSaver.getConfiguration().lastPath = file.getPath();
                     dataSaver.addHistory(file.getPath());
                     dataSaver.save();
@@ -92,17 +96,18 @@ public class HeaderPanel extends JPanel {
         mediaPlayerComponent.addEventToKeyListener(70/*F*/, openFile::doClick);
         return openFile;
     }
-    private JButton createEnterUrlButton(){
+
+    private JButton createEnterUrlButton() {
         JButton enterURL = new NoFocusableButton("Stream from url");
         enterURL.setToolTipText("Open url: U");
-        enterURL.addActionListener(l->{
+        enterURL.addActionListener(l -> {
             String url = (String) JOptionPane.showInputDialog(
                     parent,
                     "Enter media url:\n",
                     parent.getTitle(),
                     JOptionPane.PLAIN_MESSAGE,
                     null, null, dataSaver.getConfiguration().lastUrl);
-            if (url != null && url.length() > 0){
+            if (url != null && url.length() > 0) {
                 mediaPlayerComponent.mediaPlayer().media().prepare(url);
                 mediaPlayerComponent.playButton();
                 dataSaver.getConfiguration().lastPath = url;

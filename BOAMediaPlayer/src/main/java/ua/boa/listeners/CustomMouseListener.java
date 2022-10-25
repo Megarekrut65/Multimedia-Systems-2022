@@ -7,11 +7,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 
-public class CustomMouseListener extends MouseAdapter implements MouseMotionListener{
+/*
+This listener calls moving method of class HiddingThread when user moves mouse
+ */
+public class CustomMouseListener extends MouseAdapter implements MouseMotionListener {
     private final HidingThread hidingThread;
-    public CustomMouseListener(HidingThread hidingThread){
-       this.hidingThread = hidingThread;
+
+    public CustomMouseListener(HidingThread hidingThread) {
+        this.hidingThread = hidingThread;
     }
+
     @Override
     public void mouseDragged(MouseEvent e) {
         hidingThread.moving();

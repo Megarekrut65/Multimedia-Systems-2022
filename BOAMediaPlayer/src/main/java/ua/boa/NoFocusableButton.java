@@ -3,7 +3,7 @@ package ua.boa;
 import javax.swing.*;
 
 public class NoFocusableButton extends JButton {
-    public NoFocusableButton(){
+    public NoFocusableButton() {
         setFocusable(false);
     }
 
